@@ -45,13 +45,15 @@ int main(int argc, char** argv) {
 
         Solver<int> solver;
         if (solver.IsSolvable(*field)) {
-
-        } else {
+        	std::cout << "Check" << std::endl;
+        }
+        else {
             std::cout << "Oops! Your field is not solvable..." << std::endl;
         }
 
         delete field;
-    } catch (ParseException& parseException) {
+    }
+    catch (ParseException& parseException) {
         std::cout << parseException.what();
         is.close();
 
