@@ -108,9 +108,9 @@ private:
                     if (!ss) {
                         throw ParseException(row, static_cast<int>(ss.tellp()) + 3, "Next item expected.");
                     } else if (ss && ss.peek() != ' ' && ss.peek() != -1) {
-                        throw ParseException(row, static_cast<int>(ss.tellp()) - 1, "Next item expected.");
+                        throw ParseException(row, std::max(static_cast<int>(ss.tellp()) - 1, 0), "Next item expected.");
                     } else if (valid_cells.count(item) == 0) {
-                        throw ParseException(row, static_cast<int>(ss.tellp()) - 1, "Invalid cell.");
+                        throw ParseException(row, std::max(static_cast<int>(ss.tellp()) - 1, 0), "Invalid cell.");
                     } else {
                         ss.ignore(1);
                         field->At(fieldRow, column) = item;
