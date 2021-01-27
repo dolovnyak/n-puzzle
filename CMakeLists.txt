@@ -4,7 +4,7 @@ project(n_puzzle)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra")
 set(CMAKE_CXX_STANDARD 17)
 
-set(GTEST_ROOT ~/.brew) #Better solution is to add ~/.brew in the find_package search paths, but I couldn't do it.
+find_package(GTest PATHS ~/.brew)
 find_package(GTest REQUIRED)
 
 add_executable(n_puzzle)
