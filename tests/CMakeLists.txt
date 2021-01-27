@@ -8,6 +8,7 @@ find_package(GTest REQUIRED)
 add_executable(n_puzzle_tests
         ParserTests.cpp
         SolverTests.cpp
+        PriorityQueueTests.cpp
         ../src/Output.cpp)
 
 include_directories(../include)
