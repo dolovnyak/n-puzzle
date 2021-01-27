@@ -9,6 +9,7 @@ add_executable(n_puzzle_tests
         ParserTests.cpp
         SolverTests.cpp
         PriorityQueueTests.cpp
+        HeuristicsTests.cpp
         ../src/Output.cpp)
 
 include_directories(../include)

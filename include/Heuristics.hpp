@@ -1,13 +1,15 @@
 #pragma once
 
+#include "Puzzle.hpp"
+
 template<class T>
 class Heuristics {
 public:
     typedef T (*HeuristicFunction)(const Puzzle<T> &, const Puzzle<T> &);
 
-    int GetManhattanDistance(
-            [[maybe_unused]] const Puzzle<T> &field,
-            [[maybe_unused]] const Puzzle<T> &target_field) {
+    static int GetManhattanDistance(
+            const Puzzle<T> &field,
+            const Puzzle<T> &target_field) {
         int heuristic = 0;
 
         // TODO optimize
@@ -29,13 +31,16 @@ public:
         return heuristic;
     }
 
-    int GetHammingDistance(
-            [[maybe_unused]] const Puzzle<T> &field,
-            [[maybe_unused]] const Puzzle<T> &target_field) {
+    static int GetHammingDistance(
+            const Puzzle<T> &field,
+            const Puzzle<T> &target_field) {
+        auto &f = const_cast<Puzzle<T> &>(field);
+        auto &tf = const_cast<Puzzle<T> &>(target_field);
+
         int heuristic = 0;
 
-        for (int i = 0; i < field.GetSize() * field.GetSize(); ++i) {
-            if (field.At(i).value != target_field.At(i).value) {
+        for (int i = 0; i < static_cast<int>(field.GetSize() * field.GetSize()); ++i) {
+            if (f.At(i) != tf.At(i) && f.At(i) != T{}) {
                 ++heuristic;
             }
         }
