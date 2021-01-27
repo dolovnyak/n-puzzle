@@ -57,7 +57,11 @@ template<class T>
 Node<T>::Node(const Puzzle<T> &field,
               const Puzzle<T> &target_field,
               typename Heuristics<T>::HeuristicFunction heuristic_function)
-        : Node(field, target_field, heuristic_function, nullptr) {}
+        : field_(field),
+          parent_(nullptr),
+          depth_(0),
+          heuristic_(heuristic_function(field, target_field)),
+          score_(depth_ + heuristic_) {}
 
 template<class T>
 bool Node<T>::operator==(const Node<T> &node) const {
