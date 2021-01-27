@@ -309,6 +309,78 @@ TEST(ParserTests, InvalidField_InvalidSymbol4) {
     }
 }
 
+TEST(ParserTests, InvalidField_InvalidCell1) {
+    const std::string input = "5\n"
+                              "1 2 -1 4 5\n"
+                              "6 7 8 9 10\n"
+                              "11 12 13 14 15\n"
+                              "16 17 18 19 20\n"
+                              "21 22 23 24 0\n";
+
+    std::stringstream iss;
+    iss << input;
+
+    Parser<int> field_parser;
+
+    try {
+        field_parser.Parse(iss);
+        ASSERT_TRUE(false);
+    } catch (ParseException &ex) {
+        std::stringstream iss2;
+        iss2 << input;
+        Output output;
+        output.VisualizeParseException(iss2, ex);
+    }
+}
+
+TEST(ParserTests, InvalidField_InvalidCell2) {
+    const std::string input = "5\n"
+                              "1 2 0 4 5\n"
+                              "6 7 8 9 10\n"
+                              "11 12 13 14 15\n"
+                              "16 17 18 19 20\n"
+                              "21 22 23 24 0\n";
+
+    std::stringstream iss;
+    iss << input;
+
+    Parser<int> field_parser;
+
+    try {
+        field_parser.Parse(iss);
+        ASSERT_TRUE(false);
+    } catch (ParseException &ex) {
+        std::stringstream iss2;
+        iss2 << input;
+        Output output;
+        output.VisualizeParseException(iss2, ex);
+    }
+}
+
+TEST(ParserTests, InvalidField_InvalidCell3) {
+    const std::string input = "5\n"
+                              "1 2 25 4 5\n"
+                              "6 7 8 9 10\n"
+                              "11 12 13 14 15\n"
+                              "16 17 18 19 20\n"
+                              "21 22 23 24 0\n";
+
+    std::stringstream iss;
+    iss << input;
+
+    Parser<int> field_parser;
+
+    try {
+        field_parser.Parse(iss);
+        ASSERT_TRUE(false);
+    } catch (ParseException &ex) {
+        std::stringstream iss2;
+        iss2 << input;
+        Output output;
+        output.VisualizeParseException(iss2, ex);
+    }
+}
+
 TEST(ParserTests, ValidField) {
     const std::string input = "5\n"
                               "1 2 3 4 5\n"

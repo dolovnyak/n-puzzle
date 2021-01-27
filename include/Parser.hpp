@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include <map>
+#include <unordered_set>
 
 #include "Exceptions.hpp"
 #include "Puzzle.hpp"
@@ -33,10 +34,10 @@ public:
         return field;
     }
 
-    Parser() : current_state_(FieldParserState::BEGIN) {}
+    Parser() = default;
 
 private:
-    FieldParserState current_state_;
+    FieldParserState current_state_ = FieldParserState::BEGIN;
 
 private:
     typedef bool (*ParseStateFunction)(std::istream &, int &, Puzzle<T> *&);
@@ -80,6 +81,10 @@ private:
 
     static bool ParseSizeState(std::istream &is, int &row, Puzzle<T> *&field) {
         std::string line;
+        std::unordered_set<T> valid_cells;
+        for (T i = 0; static_cast<size_t>(i) < field->GetSize() * field->GetSize(); ++i) {
+            valid_cells.insert(i);
+        }
 
         for (size_t fieldRow = 0; fieldRow < field->GetSize(); ++fieldRow) {
             std::stringstream ss;
@@ -104,9 +109,12 @@ private:
                         throw ParseException(row, static_cast<int>(ss.tellp()) + 3, "Next item expected.");
                     } else if (ss && ss.peek() != ' ' && ss.peek() != -1) {
                         throw ParseException(row, static_cast<int>(ss.tellp()) - 1, "Next item expected.");
+                    } else if (valid_cells.count(item) == 0) {
+                        throw ParseException(row, static_cast<int>(ss.tellp()) - 1, "Invalid cell.");
                     } else {
                         ss.ignore(1);
                         field->At(fieldRow, column) = item;
+                        valid_cells.erase(item);
                     }
                 }
                 if (ss.peek() != -1) {
