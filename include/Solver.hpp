@@ -2,8 +2,11 @@
 # define SOLVER_HPP_
 
 # include <cmath>
+# include <unordered_set>
 
 # include "Puzzle.hpp"
+# include "Node.hpp"
+# include "PriorityQueue.hpp"
 
 template<typename TValue>
 class Solver {
@@ -17,8 +20,40 @@ public:
             return (inversions + zeroRow) % 2 == 1;
         }
     }
+    
+    void Solve(const Puzzle<TValue>& field, const Puzzle<TValue>& finishField)
+	{
+    	Node<TValue> currentNode(field, finishField, nullptr);
+    	
+    	while (true)
+		{
+    		if (currentNode.GetField() == finishField)
+				return;
+    		
+    		// check each connected to current node and if closedNodes doesn't contain it, add connected node to openNodes
+    		
+    		closedNodes_.insert(currentNode);
+    		
+    		if (openNodes_.GetSize() == 0)
+				return; //Error
+    		
+    		currentNode = openNodes_.Pop();
+		}
+
+
+//    	Node<TValue> a(field), b(field);
+//    	if (a == b)
+//			closedNodes_.insert(a);
+//		Puzzle<TValue> puzzle(3);
+//		closedNodes_.insert(Node<TValue>(puzzle));
+//		std::cout << *closedNodes_.find(a) << std::endl;
+//		std::cout << *closedNodes_.find(puzzle) << std::endl;
+	}
 
 private:
+	std::unordered_set<Node<TValue>, HashNodeByField<TValue>> closedNodes_;
+    PriorityQueue<Node<TValue>> openNodes_;
+	
     int CountInversions(const Puzzle<TValue> &field) {
         int inversions = 0;
 
