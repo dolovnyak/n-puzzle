@@ -48,8 +48,8 @@ int main(int argc, char **argv) {
 
             Puzzle<int> finishField(field->GetSize());
             for (size_t i = 0; i < field->GetSize() * field->GetSize() - 1; i++)
-                finishField.At(i).value = i + 1;
-            finishField.At(finishField.GetSize() * finishField.GetSize() - 1).value = 0;
+                finishField.At(i) = i + 1;
+            finishField.At(finishField.GetSize() * finishField.GetSize() - 1) = 0;
 
             solver.Solve(*field, finishField);
         } else {

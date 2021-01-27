@@ -34,12 +34,12 @@ public:
     [[nodiscard]] int GetScore() const;
 
 private:
-    Node *parent_;
-    int heuristic_;
-    int depth_;
-    int score_;
-
     Puzzle<T> field_;
+    Node *parent_;
+
+    int depth_;
+    int heuristic_;
+    int score_;
 };
 
 template<class T>

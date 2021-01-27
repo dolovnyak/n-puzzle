@@ -86,7 +86,7 @@ Puzzle<T> &Puzzle<T>::operator=(const Puzzle<T> &field) {
 template<class T>
 bool Puzzle<T>::operator==(const Puzzle<T> &field) const {
     for (size_t i = 0; i < cells_.size(); i++) {
-        if (cells_[i].value != field.cells_[i].value)
+        if (cells_[i] != field.cells_[i])
             return false;
     }
 
@@ -98,7 +98,7 @@ size_t Puzzle<T>::GetHash() const {
     size_t hash = 0;
 
     for (size_t i = 0; i < cells_.size(); i++)
-        hash += (i + 1) * cells_[i].value;
+        hash += (i + 1) * cells_[i];
 
     return hash;
 }
