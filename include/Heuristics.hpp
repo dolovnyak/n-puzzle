@@ -5,24 +5,39 @@ class Heuristics {
 public:
     typedef T (*HeuristicFunction)(const Puzzle<T> &, const Puzzle<T> &);
 
-    T GetManhattanDistance(
+    int GetManhattanDistance(
             [[maybe_unused]] const Puzzle<T> &field,
-            [[maybe_unused]] const Puzzle<T> &finishField) {
-        T heuristic = 0;
+            [[maybe_unused]] const Puzzle<T> &target_field) {
+        int heuristic = 0;
 
-        //TODO not implemented
+        // TODO optimize
+        for (int i = 0; i < field.GetSize(); ++i) {
+            for (int j = 0; j < field.GetSize(); ++j) {
+                if (field.At(i, j) == target_field.At(i, j))
+                    continue;
+
+                for (int ti = 0; ti < field.GetSize(); ++ti) {
+                    for (int tj = 0; tj < field.GetSize(); ++tj) {
+                        if (field.At(i, j) == target_field.At(ti, tj)) {
+                            heuristic += std::abs(i - ti) + std::abs(j - tj);
+                        }
+                    }
+                }
+            }
+        }
 
         return heuristic;
     }
 
-    T GetHammingDistance(
+    int GetHammingDistance(
             [[maybe_unused]] const Puzzle<T> &field,
-            [[maybe_unused]] const Puzzle<T> &finishField) {
-        T heuristic = 0;
+            [[maybe_unused]] const Puzzle<T> &target_field) {
+        int heuristic = 0;
 
-        for (int i = 0; i < field.GetSize() * field.GetSize(); i++) {
-            if (field.GetCellValue(i) != finishField.GetCellValue(i) && field.GetCellValue(i) != 0)
-                heuristic++;
+        for (int i = 0; i < field.GetSize() * field.GetSize(); ++i) {
+            if (field.At(i).value != target_field.At(i).value) {
+                ++heuristic;
+            }
         }
 
         return heuristic;

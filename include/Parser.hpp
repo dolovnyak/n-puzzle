@@ -115,7 +115,7 @@ private:
                         return std::make_tuple(true, static_cast<int>(ss.tellp()) - 1);
                     } else {
                         ss.ignore(1);
-                        field->At(fieldRow, column) = PuzzleCell<T>(item);
+                        field->At(fieldRow, column) = item;
                     }
                 }
                 if (ss.peek() != -1) {

@@ -11,6 +11,8 @@
 template<class T>
 class Solver {
 public:
+    Solver() : default_t_(T{}) {}
+
     bool IsSolvable(const Puzzle<T> &field) {
         int inversions = CountInversions(field);
         if (field.GetSize() % 2 != 0) {
@@ -22,46 +24,48 @@ public:
     }
 
     void Solve(const Puzzle<T> &field, const Puzzle<T> &target_field) {
-        Node<T> currentNode(field, target_field, nullptr);
+        Node<T> current_node(field, target_field, nullptr);
 
         while (true) {
-            if (currentNode.GetField() == target_field)
+            if (current_node.GetField() == target_field)
                 return;
 
             // check each connected to current node and if closedNodes doesn't contain it, add connected node to openNodes
 
-            closedNodes_.insert(currentNode);
+            closed_nodes_.insert(current_node);
 
-            if (openNodes_.GetSize() == 0)
+            if (open_nodes_.empty())
                 return; //Error
 
-            currentNode = openNodes_.Pop();
+            current_node = open_nodes_.top();
+            open_nodes_.pop();
         }
 
 
 //    	Node<T> a(field), b(field);
 //    	if (a == b)
-//			closedNodes_.insert(a);
+//			closed_nodes_.insert(a);
 //		Puzzle<T> puzzle(3);
-//		closedNodes_.insert(Node<T>(puzzle));
-//		std::cout << *closedNodes_.find(a) << std::endl;
-//		std::cout << *closedNodes_.find(puzzle) << std::endl;
+//		closed_nodes_.insert(Node<T>(puzzle));
+//		std::cout << *closed_nodes_.find(a) << std::endl;
+//		std::cout << *closed_nodes_.find(puzzle) << std::endl;
     }
 
 private:
-    std::unordered_set<Node<T>, HashNodeByField<T>> closedNodes_;
-    std::priority_queue<Node<T>, std::vector<Node<T>>, std::greater<Node<T>>> openNodes_;
+    std::unordered_set<Node<T>, HashNodeByField<T>> closed_nodes_;
+    std::priority_queue<Node<T>, std::vector<Node<T>>, std::greater<Node<T>>> open_nodes_;
+
+    T default_t_;
 
     int CountInversions(const Puzzle<T> &field) {
         int inversions = 0;
 
-        T defaulT = T{};
         size_t internalSize = field.GetSize() * field.GetSize();
         for (size_t i = 0; i < internalSize; ++i) {
             for (size_t j = i + 1; j < internalSize; ++j) {
-                T vi = const_cast<Puzzle<T> &>(field).At(i).value;
-                T vj = const_cast<Puzzle<T> &>(field).At(j).value;
-                if (vi != defaulT && vj != defaulT && vi > vj) {
+                T vi = const_cast<Puzzle<T> &>(field).At(i);
+                T vj = const_cast<Puzzle<T> &>(field).At(j);
+                if (vi != default_t_ && vj != default_t_ && vi > vj) {
                     ++inversions;
                 }
             }
@@ -73,10 +77,9 @@ private:
     int GetZeroRow(const Puzzle<T> &field) {
         int size = field.GetSize();
 
-        T defaulT = T{};
         for (int row = size - 1; row >= 0; --row) {
             for (int column = 0; column < size; ++column) {
-                if (const_cast<Puzzle<T> &>(field).At(row, column).value == defaulT) {
+                if (const_cast<Puzzle<T> &>(field).At(row, column) == default_t_) {
                     return size - row;
                 }
             }

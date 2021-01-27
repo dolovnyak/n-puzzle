@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <vector>
-#include "PuzzleCell.hpp"
 
 template<class T>
 class Puzzle {
@@ -23,7 +22,7 @@ public:
                 if (column != 0) {
                     os << " ";
                 }
-                os << const_cast<Puzzle &>(field).At(row, column).value;
+                os << const_cast<Puzzle &>(field).At(row, column);
             }
             os << std::endl;
         }
@@ -34,17 +33,17 @@ public:
 
     [[nodiscard]] size_t GetHash() const;
 
-    [[nodiscard]] size_t GetIndexByValue(T value) const;
+//    [[nodiscard]] size_t GetIndexByValue(T value) const;
 
-    [[nodiscard]] T GetCellValue(int pos) const;
+//    [[nodiscard]] T GetCellValue(int pos) const;
 
-    [[nodiscard]] PuzzleCell<T> &At(int pos);
+    [[nodiscard]] T &At(int pos);
 
-    [[nodiscard]] PuzzleCell<T> &At(int row, int column);
+    [[nodiscard]] T &At(int row, int column);
 
 private:
     size_t size_;
-    std::vector<PuzzleCell<T>> cells_;
+    std::vector<T> cells_;
 };
 
 template<class T>
@@ -53,17 +52,17 @@ size_t Puzzle<T>::GetSize() const {
 }
 
 template<class T>
-PuzzleCell<T> &Puzzle<T>::At(int pos) {
+T &Puzzle<T>::At(int pos) {
     return cells_[pos];
 }
 
-template<class T>
-T Puzzle<T>::GetCellValue(int pos) const {
-    return cells_[pos].value;
-}
+//template<class T>
+//T Puzzle<T>::GetCellValue(int pos) const {
+//    return cells_[pos].value;
+//}
 
 template<class T>
-PuzzleCell<T> &Puzzle<T>::At(int row, int column) {
+T &Puzzle<T>::At(int row, int column) {
     return cells_[row * size_ + column];
 }
 
@@ -104,11 +103,11 @@ size_t Puzzle<T>::GetHash() const {
     return hash;
 }
 
-template<class T>
-size_t Puzzle<T>::GetIndexByValue(T value) const {
-    for (size_t i = 0; i < cells_.size(); i++) {
-        if (cells_[i].value == value)
-            return i;
-    }
-    throw std::exception(); //TODO handle or remake
-}
+//template<class T>
+//size_t Puzzle<T>::GetIndexByValue(T value) const {
+//    for (size_t i = 0; i < cells_.size(); i++) {
+//        if (cells_[i].value == value)
+//            return i;
+//    }
+//    throw std::exception(); //TODO handle or remake
+//}
