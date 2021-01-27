@@ -23,9 +23,8 @@ public:
         for (int row = 0; current_state_ != FieldParserState::END;) {
             const auto &parseStateFunction = functions_map_.find(current_state_);
             if (parseStateFunction != functions_map_.end()) {
-                if (ParseStateWrapper(is, row, field, parseStateFunction->second)) {
+                if (parseStateFunction->second(is, row, field))
                     current_state_ = static_cast<FieldParserState>(static_cast<int>(current_state_) + 1);
-                }
             } else {
                 throw std::logic_error("No mapped parse function for state " + std::to_string(current_state_));
             }
@@ -40,19 +39,11 @@ private:
     FieldParserState current_state_;
 
 private:
-    typedef std::tuple<bool, int> (*ParseStateFunction)(std::istream &, int &, Puzzle<T> *&);
+    typedef bool (*ParseStateFunction)(std::istream &, int &, Puzzle<T> *&);
 
-    static bool ParseStateWrapper(std::istream &is, int &row, Puzzle<T> *&field, ParseStateFunction parse_state_function) {
-        const auto&[stateDone, errorColumn] = parse_state_function(is, row, field);
-        if (stateDone && errorColumn >= 0) {
-            throw ParseException(row, errorColumn);
-        }
-        return stateDone;
-    }
-
-    static std::tuple<bool, int> ParseBeginState(std::istream &is, int &row, Puzzle<T> *&field) {
+    static bool ParseBeginState(std::istream &is, int &row, Puzzle<T> *&field) {
         if (!is) {
-            return std::make_tuple(true, 0);
+            throw ParseException(row, 0, "Stream is broken.");
         }
 
         std::stringstream ss;
@@ -62,46 +53,46 @@ private:
         ss << line;
 
         if (ss.peek() == -1) {
-            return std::make_tuple(true, 0);
+            throw ParseException(row, 0, "Empty line.");
         } else if (ss.peek() == '#') {
             // Just ignore line.
             ++row;
-            return std::make_tuple(false, -1);
+            return false;
         } else if (ss) {
             int size;
             ss >> size;
 
             if (!ss) {
-                return std::make_tuple(true, std::max(static_cast<int>(ss.tellp()) - 1, 0));
+                throw ParseException(row, std::max(static_cast<int>(ss.tellp()) - 1, 0), "Size expected, but not provided.");
             }
 
-            if (size <= 1) {
-                return std::make_tuple(true, std::max(static_cast<int>(ss.tellp()) - static_cast<int>(std::to_string(size).size()), 0));
+            if (size <= 2) {
+                throw ParseException(row, std::max(static_cast<int>(ss.tellp()) - static_cast<int>(std::to_string(size).size()), 0), "Size > 2 expected.");
             }
 
             field = new Puzzle<T>(size);
             ++row;
-            return std::make_tuple(true, -1);
+            return true;
         } else {
-            return std::make_tuple(true, static_cast<int>(ss.tellp()) - 1);
+            throw ParseException(row, static_cast<int>(ss.tellp()) - 1, "Size > 2 expected.");
         }
     }
 
-    static std::tuple<bool, int> ParseSizeState(std::istream &is, int &row, Puzzle<T> *&field) {
+    static bool ParseSizeState(std::istream &is, int &row, Puzzle<T> *&field) {
         std::string line;
 
         for (size_t fieldRow = 0; fieldRow < field->GetSize(); ++fieldRow) {
             std::stringstream ss;
 
             if (!is) {
-                return std::make_tuple(true, 0);
+                throw ParseException(row, 0, "Stream is broken.");
             }
 
             getline(is, line);
             ss << line;
 
             if (ss.peek() == -1) {
-                return std::make_tuple(true, 0);
+                throw ParseException(row, 0, "Empty line.");
             } else if (ss.peek() == '#') {
                 // Just ignore line.
                 --fieldRow;
@@ -110,9 +101,9 @@ private:
                 for (size_t column = 0; column < field->GetSize(); ++column) {
                     ss >> item;
                     if (!ss) {
-                        return std::make_tuple(true, static_cast<int>(ss.tellp()) + 3);
+                        throw ParseException(row, static_cast<int>(ss.tellp()) + 3, "Next item expected.");
                     } else if (ss && ss.peek() != ' ' && ss.peek() != -1) {
-                        return std::make_tuple(true, static_cast<int>(ss.tellp()) - 1);
+                        throw ParseException(row, static_cast<int>(ss.tellp()) - 1, "Next item expected.");
                     } else {
                         ss.ignore(1);
                         field->At(fieldRow, column) = item;
@@ -125,33 +116,33 @@ private:
                         ss.read(&c, 1);
                     }
                     if (!ss || c != '#') {
-                        return std::make_tuple(true, ss.tellp());
+                        throw ParseException(row, ss.tellp(), "Unknown symbol.");
                     }
                 }
             } else {
-                return std::make_tuple(true, ss.tellp());;
+                throw ParseException(row, ss.tellp());
             }
 
             ++row;
         }
 
-        return std::make_tuple(true, -1);
+        return true;
     }
 
-    static std::tuple<bool, int> ParseFieldState(std::istream &is, int &row, [[maybe_unused]] Puzzle<T> *&field) {
+    static bool ParseFieldState(std::istream &is, int &row, [[maybe_unused]] Puzzle<T> *&field) {
         if (!is) {
-            return std::make_tuple(true, -1);
+            return true;
         }
 
         std::string line;
         getline(is, line);
 
         if (!line.empty() && line[0] != '#') {
-            return std::make_tuple(true, 0);
+            throw ParseException(row, 0, "Unknown symbol.");
         } else {
             // Just ignore line.
             ++row;
-            return std::make_tuple(false, -1);
+            return false;
         }
     }
 

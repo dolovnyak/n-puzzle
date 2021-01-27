@@ -139,7 +139,7 @@ TEST(ParserTests, InvalidField_OverflowSize) {
 }
 
 TEST(ParserTests, InvalidField_WrongColumnSize) {
-    const std::string input = "2\n"
+    const std::string input = "3\n"
                               "1\n"
                               "3\n";
     std::stringstream iss;
@@ -159,8 +159,8 @@ TEST(ParserTests, InvalidField_WrongColumnSize) {
 }
 
 TEST(ParserTests, InvalidField_WrongRowSize1) {
-    const std::string input = "2\n"
-                              "1 3\n"
+    const std::string input = "3\n"
+                              "1 3 4\n"
                               "# comment1\n"
                               "# comment2\n";
     std::stringstream iss;
@@ -180,8 +180,8 @@ TEST(ParserTests, InvalidField_WrongRowSize1) {
 }
 
 TEST(ParserTests, InvalidField_WrongRowSize2) {
-    const std::string input = "2\n"
-                              "1 3\n"
+    const std::string input = "3\n"
+                              "1 3 4\n"
                               "# comment1\n"
                               "# comment2\n"
                               "\n";
@@ -202,8 +202,8 @@ TEST(ParserTests, InvalidField_WrongRowSize2) {
 }
 
 TEST(ParserTests, InvalidField_EmptyCell) {
-    const std::string input = "2\n"
-                              "1 3\n"
+    const std::string input = "3\n"
+                              "1 3 4\n"
                               "4 # comment1\n"
                               "# comment2\n";
     std::stringstream iss;
@@ -223,8 +223,8 @@ TEST(ParserTests, InvalidField_EmptyCell) {
 }
 
 TEST(ParserTests, InvalidField_InvalidSymbol1) {
-    const std::string input = "2\n"
-                              "1 C\n"
+    const std::string input = "3\n"
+                              "1 C 4\n"
                               "# comment1\n"
                               "# comment2";
     std::stringstream iss;
@@ -244,8 +244,8 @@ TEST(ParserTests, InvalidField_InvalidSymbol1) {
 }
 
 TEST(ParserTests, InvalidField_InvalidSymbol2) {
-    const std::string input = "2\n"
-                              "1 23a\n"
+    const std::string input = "3\n"
+                              "1 23a 4\n"
                               "# comment1\n"
                               "# comment2";
     std::stringstream iss;
@@ -265,11 +265,11 @@ TEST(ParserTests, InvalidField_InvalidSymbol2) {
 }
 
 TEST(ParserTests, InvalidField_InvalidSymbol3) {
-    const std::string input = "2\n"
-                              "1 23\n"
+    const std::string input = "3\n"
+                              "1 23 4\n"
                               "# comment1\n"
                               "# comment2\n"
-                              "32 0\n"
+                              "32 0 12\n"
                               "c";
     std::stringstream iss;
     iss << input;
@@ -288,7 +288,7 @@ TEST(ParserTests, InvalidField_InvalidSymbol3) {
 }
 
 TEST(ParserTests, InvalidField_InvalidSymbol4) {
-    const std::string input = "2\n"
+    const std::string input = "3\n"
                               "1 23                           c #kek\n"
                               "# comment1\n"
                               "# comment2\n"

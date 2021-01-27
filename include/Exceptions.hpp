@@ -1,6 +1,7 @@
 #pragma once
 
 #include <exception>
+#include <utility>
 
 class ParseException : public std::exception {
 public:
@@ -8,6 +9,11 @@ public:
             : row_(row),
               column_(column),
               message_("Parse error at position [" + std::to_string(row_) + "," + std::to_string(column_) + "]") {}
+
+    ParseException(size_t row, size_t column, std::string  message)
+            : row_(row),
+              column_(column),
+              message_(std::move(message)) {}
 
     [[nodiscard]] const char *what() const noexcept override {
         return message_.c_str();
