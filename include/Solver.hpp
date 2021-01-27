@@ -2,11 +2,11 @@
 # define SOLVER_HPP_
 
 # include <cmath>
+# include <queue>
 # include <unordered_set>
 
 # include "Puzzle.hpp"
 # include "Node.hpp"
-# include "PriorityQueue.hpp"
 
 template<typename TValue>
 class Solver {
@@ -52,7 +52,9 @@ public:
 
 private:
 	std::unordered_set<Node<TValue>, HashNodeByField<TValue>> closedNodes_;
-    PriorityQueue<Node<TValue>> openNodes_;
+
+    using PriorityQueue = std::priority_queue<Node<TValue>>;
+    PriorityQueue openNodes_;
 	
     int CountInversions(const Puzzle<TValue> &field) {
         int inversions = 0;
