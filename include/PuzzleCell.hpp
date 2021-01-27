@@ -1,21 +1,22 @@
 #pragma once
 
-template<typename TValue>
+template<class T>
 struct PuzzleCell {
-    TValue value;
+    T value;
 
     explicit PuzzleCell();
-    explicit PuzzleCell(TValue value);
+
+    explicit PuzzleCell(T value);
 };
 
-template<typename TValue>
-PuzzleCell<TValue>::PuzzleCell() = default;
+template<class T>
+PuzzleCell<T>::PuzzleCell() = default;
 
-template<typename TValue>
-PuzzleCell<TValue>::PuzzleCell(TValue value) : value(value) {}
+template<class T>
+PuzzleCell<T>::PuzzleCell(T value) : value(value) {}
 
-template<typename TValue>
-std::ostream &operator<<(std::ostream &os, const PuzzleCell<TValue> &c) {
+template<class T>
+std::ostream &operator<<(std::ostream &os, const PuzzleCell<T> &c) {
     os << c.value;
     return os;
 }

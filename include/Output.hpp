@@ -26,5 +26,5 @@
 
 class Output {
 public:
-    void VisualizeParseException(std::istream& is, const ParseException& ex) noexcept;
+    void VisualizeParseException(std::istream &is, const ParseException &ex) noexcept;
 };

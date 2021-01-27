@@ -15,11 +15,11 @@ enum FieldParserState {
     END
 };
 
-template<typename TValue>
+template<class T>
 class Parser {
 public:
-    Puzzle<TValue> *Parse(std::istream &is) {
-        Puzzle<TValue> *field = nullptr;
+    Puzzle<T> *Parse(std::istream &is) {
+        Puzzle<T> *field = nullptr;
         for (int row = 0; current_state_ != FieldParserState::END;) {
             const auto &parseStateFunction = functions_map_.find(current_state_);
             if (parseStateFunction != functions_map_.end()) {
@@ -40,9 +40,9 @@ private:
     FieldParserState current_state_;
 
 private:
-    typedef std::tuple<bool, int> (*ParseStateFunction)(std::istream &, int &, Puzzle<TValue> *&);
+    typedef std::tuple<bool, int> (*ParseStateFunction)(std::istream &, int &, Puzzle<T> *&);
 
-    static bool ParseStateWrapper(std::istream &is, int &row, Puzzle<TValue> *&field, ParseStateFunction parse_state_function) {
+    static bool ParseStateWrapper(std::istream &is, int &row, Puzzle<T> *&field, ParseStateFunction parse_state_function) {
         const auto&[stateDone, errorColumn] = parse_state_function(is, row, field);
         if (stateDone && errorColumn >= 0) {
             throw ParseException(row, errorColumn);
@@ -50,7 +50,7 @@ private:
         return stateDone;
     }
 
-    static std::tuple<bool, int> ParseBeginState(std::istream &is, int &row, Puzzle<TValue> *&field) {
+    static std::tuple<bool, int> ParseBeginState(std::istream &is, int &row, Puzzle<T> *&field) {
         if (!is) {
             return std::make_tuple(true, 0);
         }
@@ -79,7 +79,7 @@ private:
                 return std::make_tuple(true, std::max(static_cast<int>(ss.tellp()) - static_cast<int>(std::to_string(size).size()), 0));
             }
 
-            field = new Puzzle<TValue>(size);
+            field = new Puzzle<T>(size);
             ++row;
             return std::make_tuple(true, -1);
         } else {
@@ -87,7 +87,7 @@ private:
         }
     }
 
-    static std::tuple<bool, int> ParseSizeState(std::istream &is, int &row, Puzzle<TValue> *&field) {
+    static std::tuple<bool, int> ParseSizeState(std::istream &is, int &row, Puzzle<T> *&field) {
         std::string line;
 
         for (size_t fieldRow = 0; fieldRow < field->GetSize(); ++fieldRow) {
@@ -106,7 +106,7 @@ private:
                 // Just ignore line.
                 --fieldRow;
             } else if (ss) {
-                TValue item;
+                T item;
                 for (size_t column = 0; column < field->GetSize(); ++column) {
                     ss >> item;
                     if (!ss) {
@@ -115,7 +115,7 @@ private:
                         return std::make_tuple(true, static_cast<int>(ss.tellp()) - 1);
                     } else {
                         ss.ignore(1);
-                        field->At(fieldRow, column) = PuzzleCell<TValue>(item);
+                        field->At(fieldRow, column) = PuzzleCell<T>(item);
                     }
                 }
                 if (ss.peek() != -1) {
@@ -138,7 +138,7 @@ private:
         return std::make_tuple(true, -1);
     }
 
-    static std::tuple<bool, int> ParseFieldState(std::istream &is, int &row, [[maybe_unused]] Puzzle<TValue> *&field) {
+    static std::tuple<bool, int> ParseFieldState(std::istream &is, int &row, [[maybe_unused]] Puzzle<T> *&field) {
         if (!is) {
             return std::make_tuple(true, -1);
         }
@@ -156,12 +156,12 @@ private:
     }
 
 private:
-    static const std::map<FieldParserState, Parser<TValue>::ParseStateFunction> functions_map_;
+    static const std::map<FieldParserState, Parser<T>::ParseStateFunction> functions_map_;
 };
 
-template<typename TValue>
-const std::map<FieldParserState, typename Parser<TValue>::ParseStateFunction> Parser<TValue>::functions_map_ = {
-        {FieldParserState::BEGIN, Parser<TValue>::ParseBeginState},
-        {FieldParserState::SIZE,  Parser<TValue>::ParseSizeState},
-        {FieldParserState::FIELD, Parser<TValue>::ParseFieldState},
+template<class T>
+const std::map<FieldParserState, typename Parser<T>::ParseStateFunction> Parser<T>::functions_map_ = {
+        {FieldParserState::BEGIN, Parser<T>::ParseBeginState},
+        {FieldParserState::SIZE,  Parser<T>::ParseSizeState},
+        {FieldParserState::FIELD, Parser<T>::ParseFieldState},
 };

@@ -8,7 +8,7 @@
 #include "Solver.hpp"
 #include "Output.hpp"
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
     argparse::ArgumentParser program("n-puzzle");
 
     program.add_argument("-i", "--input")
@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
     try {
         program.parse_args(argc, argv);
     }
-    catch (const std::runtime_error& err) {
+    catch (const std::runtime_error &err) {
         std::cout << err.what() << std::endl;
         std::cout << program;
         exit(0);
@@ -45,21 +45,20 @@ int main(int argc, char** argv) {
 
         Solver<int> solver;
         if (solver.IsSolvable(*field)) {
-        	
-        	Puzzle<int> finishField(field->GetSize());
-        	for (size_t i = 0; i < field->GetSize() * field->GetSize() - 1; i++)
-        		finishField.At(i).value = i + 1;
-        	finishField.At(finishField.GetSize() * finishField.GetSize() - 1).value = 0;
-        	
-        	solver.Solve(*field, finishField);
-        }
-        else {
+
+            Puzzle<int> finishField(field->GetSize());
+            for (size_t i = 0; i < field->GetSize() * field->GetSize() - 1; i++)
+                finishField.At(i).value = i + 1;
+            finishField.At(finishField.GetSize() * finishField.GetSize() - 1).value = 0;
+
+            solver.Solve(*field, finishField);
+        } else {
             std::cout << "Oops! Your field is not solvable..." << std::endl;
         }
 
         delete field;
     }
-    catch (ParseException& parseException) {
+    catch (ParseException &parseException) {
         std::cout << parseException.what();
         is.close();
 

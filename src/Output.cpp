@@ -2,7 +2,7 @@
 
 #include "Output.hpp"
 
-void Output::VisualizeParseException(std::istream& is, const ParseException& ex) noexcept {
+void Output::VisualizeParseException(std::istream &is, const ParseException &ex) noexcept {
     // Print exception message with position of invalid field part.
     std::cout << ex.what() << std::endl;
 

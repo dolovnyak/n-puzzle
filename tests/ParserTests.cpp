@@ -7,7 +7,7 @@
 #include "Parser.hpp"
 #include "Output.hpp"
 
-TEST(FieldParserTests, InvalidField_EmptyInput) {
+TEST(ParserTests, InvalidField_EmptyInput) {
     const std::string input;
     std::stringstream iss;
     iss << input;
@@ -25,7 +25,7 @@ TEST(FieldParserTests, InvalidField_EmptyInput) {
     }
 }
 
-TEST(FieldParserTests, InvalidField_OneComment) {
+TEST(ParserTests, InvalidField_OneComment) {
     const std::string input = "# comment";
     std::stringstream iss;
     iss << input;
@@ -43,7 +43,7 @@ TEST(FieldParserTests, InvalidField_OneComment) {
     }
 }
 
-TEST(FieldParserTests, InvalidField_ZeroSize) {
+TEST(ParserTests, InvalidField_ZeroSize) {
     const std::string input = "0\n"
                               "# comment\n";
     std::stringstream iss;
@@ -62,7 +62,7 @@ TEST(FieldParserTests, InvalidField_ZeroSize) {
     }
 }
 
-TEST(FieldParserTests, InvalidField_NegativeSize) {
+TEST(ParserTests, InvalidField_NegativeSize) {
     const std::string input = "-1\n"
                               "# comment\n";
     std::stringstream iss;
@@ -81,7 +81,7 @@ TEST(FieldParserTests, InvalidField_NegativeSize) {
     }
 }
 
-TEST(FieldParserTests, InvalidField_TooSmallSize) {
+TEST(ParserTests, InvalidField_TooSmallSize) {
     const std::string input = "1\n"
                               "# comment\n";
     std::stringstream iss;
@@ -100,7 +100,7 @@ TEST(FieldParserTests, InvalidField_TooSmallSize) {
     }
 }
 
-TEST(FieldParserTests, InvalidField_WrongSize) {
+TEST(ParserTests, InvalidField_WrongSize) {
     const std::string input = "fa\n"
                               "# comment\n";
     std::stringstream iss;
@@ -119,7 +119,7 @@ TEST(FieldParserTests, InvalidField_WrongSize) {
     }
 }
 
-TEST(FieldParserTests, InvalidField_OverflowSize) {
+TEST(ParserTests, InvalidField_OverflowSize) {
     const std::string input = "99999999999999999999999999999\n"
                               "# comment\n";
     std::stringstream iss;
@@ -138,7 +138,7 @@ TEST(FieldParserTests, InvalidField_OverflowSize) {
     }
 }
 
-TEST(FieldParserTests, InvalidField_WrongColumnSize) {
+TEST(ParserTests, InvalidField_WrongColumnSize) {
     const std::string input = "2\n"
                               "1\n"
                               "3\n";
@@ -158,7 +158,7 @@ TEST(FieldParserTests, InvalidField_WrongColumnSize) {
     }
 }
 
-TEST(FieldParserTests, InvalidField_WrongRowSize1) {
+TEST(ParserTests, InvalidField_WrongRowSize1) {
     const std::string input = "2\n"
                               "1 3\n"
                               "# comment1\n"
@@ -179,7 +179,7 @@ TEST(FieldParserTests, InvalidField_WrongRowSize1) {
     }
 }
 
-TEST(FieldParserTests, InvalidField_WrongRowSize2) {
+TEST(ParserTests, InvalidField_WrongRowSize2) {
     const std::string input = "2\n"
                               "1 3\n"
                               "# comment1\n"
@@ -201,7 +201,7 @@ TEST(FieldParserTests, InvalidField_WrongRowSize2) {
     }
 }
 
-TEST(FieldParserTests, InvalidField_EmptyCell) {
+TEST(ParserTests, InvalidField_EmptyCell) {
     const std::string input = "2\n"
                               "1 3\n"
                               "4 # comment1\n"
@@ -222,7 +222,7 @@ TEST(FieldParserTests, InvalidField_EmptyCell) {
     }
 }
 
-TEST(FieldParserTests, InvalidField_InvalidSymbol1) {
+TEST(ParserTests, InvalidField_InvalidSymbol1) {
     const std::string input = "2\n"
                               "1 C\n"
                               "# comment1\n"
@@ -243,7 +243,7 @@ TEST(FieldParserTests, InvalidField_InvalidSymbol1) {
     }
 }
 
-TEST(FieldParserTests, InvalidField_InvalidSymbol2) {
+TEST(ParserTests, InvalidField_InvalidSymbol2) {
     const std::string input = "2\n"
                               "1 23a\n"
                               "# comment1\n"
@@ -264,7 +264,7 @@ TEST(FieldParserTests, InvalidField_InvalidSymbol2) {
     }
 }
 
-TEST(FieldParserTests, InvalidField_InvalidSymbol3) {
+TEST(ParserTests, InvalidField_InvalidSymbol3) {
     const std::string input = "2\n"
                               "1 23\n"
                               "# comment1\n"
@@ -287,7 +287,7 @@ TEST(FieldParserTests, InvalidField_InvalidSymbol3) {
     }
 }
 
-TEST(FieldParserTests, InvalidField_InvalidSymbol4) {
+TEST(ParserTests, InvalidField_InvalidSymbol4) {
     const std::string input = "2\n"
                               "1 23                           c #kek\n"
                               "# comment1\n"
@@ -309,7 +309,7 @@ TEST(FieldParserTests, InvalidField_InvalidSymbol4) {
     }
 }
 
-TEST(FieldParserTests, ValidField) {
+TEST(ParserTests, ValidField) {
     const std::string input = "5\n"
                               "1 2 3 4 5\n"
                               "6 7 8 9 10\n"

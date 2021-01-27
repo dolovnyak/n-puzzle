@@ -15,7 +15,7 @@ void SolvableCheckerTestWrapper(const std::string &input, bool expectedResult) {
     delete field;
 }
 
-TEST(SolvableCheckerTests, Solvable1) {
+TEST(SolverTests, Solvable1) {
     const std::string input = "3\n"
                               "1 8 2\n"
                               "0 4 3\n"
@@ -24,7 +24,7 @@ TEST(SolvableCheckerTests, Solvable1) {
     SolvableCheckerTestWrapper(input, true);
 }
 
-TEST(SolvableCheckerTests, Solvable2) {
+TEST(SolverTests, Solvable2) {
     const std::string input = "4\n"
                               "13 2 10 3\n"
                               "1 12 8 4\n"
@@ -34,7 +34,7 @@ TEST(SolvableCheckerTests, Solvable2) {
     SolvableCheckerTestWrapper(input, true);
 }
 
-TEST(SolvableCheckerTests, Solvable3) {
+TEST(SolverTests, Solvable3) {
     const std::string input = "4\n"
                               "6 13 7 10\n"
                               "8 9 11 0\n"
@@ -44,7 +44,7 @@ TEST(SolvableCheckerTests, Solvable3) {
     SolvableCheckerTestWrapper(input, true);
 }
 
-TEST(SolvableCheckerTests, NotSolvable3) {
+TEST(SolverTests, NotSolvable3) {
     const std::string input = "4\n"
                               "3 9 1 15\n"
                               "14 11 4 6\n"
