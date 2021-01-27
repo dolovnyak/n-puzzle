@@ -1,5 +1,4 @@
-#ifndef HEURISTICS_HPP
-#define HEURISTICS_HPP
+#pragma once
 
 template<typename T>
 T find_manhattan_distance_heuristic(
@@ -26,5 +25,3 @@ T find_hamming_distance_heuristic(const Puzzle<T>& field, const Puzzle<T>& finis
 	
 	return heuristic;
 }
-
-#endif

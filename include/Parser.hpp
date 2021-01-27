@@ -1,13 +1,12 @@
-#ifndef PARSER_HPP_
-# define PARSER_HPP_
+#pragma once
 
-# include <iostream>
-# include <sstream>
-# include <string>
-# include <map>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <map>
 
-# include "Exceptions.hpp"
-# include "Puzzle.hpp"
+#include "Exceptions.hpp"
+#include "Puzzle.hpp"
 
 enum FieldParserState {
     BEGIN,
@@ -166,5 +165,3 @@ const std::map<FieldParserState, typename Parser<TValue>::ParseStateFunction> Pa
         {FieldParserState::SIZE,  Parser<TValue>::ParseSizeState},
         {FieldParserState::FIELD, Parser<TValue>::ParseFieldState},
 };
-
-#endif // PARSER_HPP_

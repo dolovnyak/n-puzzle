@@ -1,7 +1,6 @@
-#ifndef EXCEPTIONS_HPP_
-# define EXCEPTIONS_HPP_
+#pragma once
 
-# include <exception>
+#include <exception>
 
 class ParseException : public std::exception {
 public:
@@ -27,5 +26,3 @@ private:
     size_t column_;
     std::string message_;
 };
-
-#endif // EXCEPTIONS_HPP_

@@ -1,5 +1,4 @@
-#ifndef PUZZLE_CELL_HPP_
-# define PUZZLE_CELL_HPP_
+#pragma once
 
 template<typename TValue>
 struct PuzzleCell {
@@ -20,5 +19,3 @@ std::ostream &operator<<(std::ostream &os, const PuzzleCell<TValue> &c) {
     os << c.value;
     return os;
 }
-
-#endif // PUZZLE_CELL_HPP_

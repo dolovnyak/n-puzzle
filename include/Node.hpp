@@ -1,5 +1,4 @@
-#ifndef NODE_HPP
-#define NODE_HPP
+#pragma once
 
 #include "Puzzle.hpp"
 #include "Heuristics.hpp"
@@ -100,5 +99,3 @@ std::ostream &operator<<(std::ostream &os, const Node<T> &node) {
     os << node.GetField();
     return os;
 }
-
-#endif

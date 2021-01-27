@@ -1,9 +1,8 @@
-#ifndef PUZZLE_HPP_
-# define PUZZLE_HPP_
+#pragma once
 
-# include <iostream>
-# include <vector>
-# include "PuzzleCell.hpp"
+#include <iostream>
+#include <vector>
+#include "PuzzleCell.hpp"
 
 template<typename TValue>
 class Puzzle {
@@ -114,5 +113,3 @@ size_t Puzzle<TValue>::GetIndexByValue(TValue value) const
 	}
 	throw std::exception(); //TODO handle or remake
 }
-
-#endif // PUZZLE_HPP_

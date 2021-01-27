@@ -1,6 +1,3 @@
-#ifndef ARGPARSE_HPP_
-# define ARGPARSE_HPP_
-
 /*
   __ _ _ __ __ _ _ __   __ _ _ __ ___  ___
  / _` | '__/ _` | '_ \ / _` | '__/ __|/ _ \ Argument Parser for Modern C++
@@ -26,6 +23,9 @@ LIABILITY, WHETHER IN AN ACTION OF  CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE  OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
+#pragma once
+
 #include <algorithm>
 #include <any>
 #include <cerrno>
@@ -1085,5 +1085,3 @@ namespace argparse {
     };
 
 } // namespace argparse
-
-#endif //ARGPARSE_HPP_

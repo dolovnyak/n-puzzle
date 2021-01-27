@@ -1,12 +1,11 @@
-#ifndef SOLVER_HPP_
-# define SOLVER_HPP_
+#pragma once
 
-# include <cmath>
-# include <queue>
-# include <unordered_set>
+#include <cmath>
+#include <queue>
+#include <unordered_set>
 
-# include "Puzzle.hpp"
-# include "Node.hpp"
+#include "Puzzle.hpp"
+#include "Node.hpp"
 
 template<typename TValue>
 class Solver {
@@ -89,5 +88,3 @@ private:
         throw std::logic_error("Not found zero element");
     }
 };
-
-#endif // SOLVER_HPP_
