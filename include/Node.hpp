@@ -113,7 +113,11 @@ Node<T> &Node<T>::operator=(const Node<T> &node) {
 }
 
 template<class T>
-Node<T>::Node(int heuristic) : heuristic_(heuristic), depth_(0), score_(0) {}
+Node<T>::Node(int heuristic)
+        : parent_(nullptr),
+          depth_(0),
+          heuristic_(heuristic),
+          score_(0) {}
 
 template<class T>
 struct HashNodeByField {
