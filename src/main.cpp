@@ -45,7 +45,13 @@ int main(int argc, char** argv) {
 
         Solver<int> solver;
         if (solver.IsSolvable(*field)) {
-        	std::cout << "Check" << std::endl;
+        	
+        	Puzzle<int> finishField(field->GetSize());
+        	for (size_t i = 0; i < field->GetSize() * field->GetSize() - 1; i++)
+        		finishField.At(i).value = i + 1;
+        	finishField.At(finishField.GetSize() * finishField.GetSize() - 1).value = 0;
+        	
+        	solver.Solve(*field, finishField);
         }
         else {
             std::cout << "Oops! Your field is not solvable..." << std::endl;
