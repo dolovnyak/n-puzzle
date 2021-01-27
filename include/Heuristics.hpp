@@ -2,7 +2,9 @@
 #define HEURISTICS_HPP
 
 template<typename T>
-T find_manhattan_distance_heuristic(const Puzzle<T>& field, const Puzzle<T>& finishField)
+T find_manhattan_distance_heuristic(
+        [[maybe_unused]] const Puzzle<T>& field,
+        [[maybe_unused]] const Puzzle<T>& finishField)
 {
 	T heuristic = 0;
 	
