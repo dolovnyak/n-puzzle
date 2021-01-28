@@ -8,9 +8,9 @@ void SolvableCheckerTestWrapper(const std::string &input, bool expectedResult) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
-    Puzzle<int> *field = field_parser.Parse(iss);
-    Solver<int> solver;
+    Parser field_parser;
+    Puzzle *field = field_parser.Parse(iss);
+    Solver solver(Heuristics::Type::Hamming);
     ASSERT_EQ(solver.IsSolvable(*field), expectedResult);
     delete field;
 }

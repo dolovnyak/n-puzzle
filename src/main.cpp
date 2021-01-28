@@ -15,6 +15,10 @@ int main(int argc, char **argv) {
             .required()
             .help("specify the input file.");
 
+    program.add_argument("-h", "--heuristics")
+            .required()
+            .help("specify the heuristics function.");
+
     try {
         program.parse_args(argc, argv);
     }
@@ -36,27 +40,28 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    Parser<int> field_parser;
+    Parser parser;
     try {
-        Puzzle<int> *field = field_parser.Parse(is);
-        if (field == nullptr) {
+        Puzzle *puzzle = parser.Parse(is);
+        if (puzzle == nullptr) {
             throw std::logic_error("Parser returned nullptr.");
         }
 
-        Solver<int> solver;
-        if (solver.IsSolvable(*field)) {
+        // TODO user heuristics
+        Solver solver(Heuristics::Type::Hamming);
+        if (Solver::IsSolvable(*puzzle)) {
+            std::vector<int> cells(puzzle->GetSize() * puzzle->GetSize());
+            for (size_t i = 0; i < puzzle->GetSize() * puzzle->GetSize() - 1; i++)
+                cells[i] = i + 1;
+            cells.back() = 0;
+            Puzzle target_puzzle(puzzle->GetSize(), cells);
 
-            Puzzle<int> finishField(field->GetSize());
-            for (size_t i = 0; i < field->GetSize() * field->GetSize() - 1; i++)
-                finishField.At(i) = i + 1;
-            finishField.At(finishField.GetSize() * finishField.GetSize() - 1) = 0;
-
-            solver.Solve(*field, finishField, Heuristics<int>::GetHammingDistance); //TODO choose heuristic from user input
+            solver.Solve(*puzzle, target_puzzle);
         } else {
-            std::cout << "Oops! Your field is not solvable..." << std::endl;
+            std::cout << "Oops! Your puzzle is not solvable..." << std::endl;
         }
 
-        delete field;
+        delete puzzle;
     }
     catch (ParseException &parseException) {
         std::cout << parseException.what();

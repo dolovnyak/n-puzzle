@@ -10,7 +10,14 @@ add_executable(n_puzzle_tests
         SolverTests.cpp
         PriorityQueueTests.cpp
         HeuristicsTests.cpp
-        ../src/Output.cpp)
+        MoveTests.cpp
+        ../src/Heuristics.cpp
+        ../src/Move.cpp
+        ../src/Node.cpp
+        ../src/Output.cpp
+        ../src/Parser.cpp
+        ../src/Puzzle.cpp
+        ../src/Solver.cpp)
 
 include_directories(../include)
 

@@ -12,7 +12,7 @@ TEST(ParserTests, InvalidField_EmptyInput) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
+    Parser field_parser;
 
     try {
         field_parser.Parse(iss);
@@ -30,7 +30,7 @@ TEST(ParserTests, InvalidField_OneComment) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
+    Parser field_parser;
 
     try {
         field_parser.Parse(iss);
@@ -49,7 +49,7 @@ TEST(ParserTests, InvalidField_ZeroSize) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
+    Parser field_parser;
 
     try {
         field_parser.Parse(iss);
@@ -68,7 +68,7 @@ TEST(ParserTests, InvalidField_NegativeSize) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
+    Parser field_parser;
 
     try {
         field_parser.Parse(iss);
@@ -87,7 +87,7 @@ TEST(ParserTests, InvalidField_TooSmallSize) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
+    Parser field_parser;
 
     try {
         field_parser.Parse(iss);
@@ -106,7 +106,7 @@ TEST(ParserTests, InvalidField_WrongSize) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
+    Parser field_parser;
 
     try {
         field_parser.Parse(iss);
@@ -125,7 +125,7 @@ TEST(ParserTests, InvalidField_OverflowSize) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
+    Parser field_parser;
 
     try {
         field_parser.Parse(iss);
@@ -145,7 +145,7 @@ TEST(ParserTests, InvalidField_WrongColumnSize) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
+    Parser field_parser;
 
     try {
         field_parser.Parse(iss);
@@ -166,7 +166,7 @@ TEST(ParserTests, InvalidField_WrongRowSize1) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
+    Parser field_parser;
 
     try {
         field_parser.Parse(iss);
@@ -188,7 +188,7 @@ TEST(ParserTests, InvalidField_WrongRowSize2) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
+    Parser field_parser;
 
     try {
         field_parser.Parse(iss);
@@ -209,7 +209,7 @@ TEST(ParserTests, InvalidField_EmptyCell) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
+    Parser field_parser;
 
     try {
         field_parser.Parse(iss);
@@ -230,7 +230,7 @@ TEST(ParserTests, InvalidField_InvalidSymbol1) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
+    Parser field_parser;
 
     try {
         field_parser.Parse(iss);
@@ -251,7 +251,7 @@ TEST(ParserTests, InvalidField_InvalidSymbol2) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
+    Parser field_parser;
 
     try {
         field_parser.Parse(iss);
@@ -274,7 +274,7 @@ TEST(ParserTests, InvalidField_InvalidSymbol3) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
+    Parser field_parser;
 
     try {
         field_parser.Parse(iss);
@@ -296,7 +296,7 @@ TEST(ParserTests, InvalidField_InvalidSymbol4) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
+    Parser field_parser;
 
     try {
         field_parser.Parse(iss);
@@ -320,7 +320,7 @@ TEST(ParserTests, InvalidField_InvalidCell1) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
+    Parser field_parser;
 
     try {
         field_parser.Parse(iss);
@@ -344,7 +344,7 @@ TEST(ParserTests, InvalidField_InvalidCell2) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
+    Parser field_parser;
 
     try {
         field_parser.Parse(iss);
@@ -368,7 +368,7 @@ TEST(ParserTests, InvalidField_InvalidCell3) {
     std::stringstream iss;
     iss << input;
 
-    Parser<int> field_parser;
+    Parser field_parser;
 
     try {
         field_parser.Parse(iss);
@@ -393,8 +393,8 @@ TEST(ParserTests, ValidField) {
     iss << input;
 
     ASSERT_NO_THROW(
-            Parser<int> field_parser;
-            Puzzle<int> *field = field_parser.Parse(iss);
+            Parser field_parser;
+            Puzzle *field = field_parser.Parse(iss);
             if (field == nullptr) {
                 throw std::logic_error("Parser returned nullptr.");
             }

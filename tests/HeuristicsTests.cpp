@@ -4,14 +4,18 @@
 #include "Puzzle.hpp"
 #include "Parser.hpp"
 
-Puzzle<int> *CreatePuzzle(const std::string& input) {
-    Parser<int> parser;
-    std::stringstream iss;
-    iss << input;
-    return parser.Parse(iss);
-}
 
-TEST(HeuristicsTests, Hamming1) {
+class HeuristicsTests : public ::testing::Test {
+public:
+    static Puzzle *CreatePuzzle(const std::string& input) {
+        Parser parser;
+        std::stringstream iss;
+        iss << input;
+        return parser.Parse(iss);
+    }
+};
+
+TEST_F(HeuristicsTests, Hamming1) {
     const std::string field = "3\n"
                               "1 2 3\n"
                               "4 5 6\n"
@@ -22,17 +26,17 @@ TEST(HeuristicsTests, Hamming1) {
                                      "4 5 6\n"
                                      "7 8 0\n";
 
-    Puzzle<int> *puzzle = CreatePuzzle(field);
-    Puzzle<int> *target_puzzle = CreatePuzzle(target_field);
+    Puzzle *puzzle = HeuristicsTests::CreatePuzzle(field);
+    Puzzle *target_puzzle = HeuristicsTests::CreatePuzzle(target_field);
 
-    int h = Heuristics<int>::GetHammingDistance(*puzzle, *target_puzzle);
+    int h = Heuristics::GetHammingDistance(*puzzle, *target_puzzle);
     ASSERT_EQ(h, 1);
 
     delete puzzle;
     delete target_puzzle;
 }
 
-TEST(HeuristicsTests, Hamming2) {
+TEST_F(HeuristicsTests, Hamming2) {
     const std::string field = "3\n"
                               "1 2 3\n"
                               "4 5 6\n"
@@ -43,17 +47,17 @@ TEST(HeuristicsTests, Hamming2) {
                                      "4 5 6\n"
                                      "7 8 0\n";
 
-    Puzzle<int> *puzzle = CreatePuzzle(field);
-    Puzzle<int> *target_puzzle = CreatePuzzle(target_field);
+    Puzzle *puzzle = HeuristicsTests::CreatePuzzle(field);
+    Puzzle *target_puzzle = HeuristicsTests::CreatePuzzle(target_field);
 
-    int h = Heuristics<int>::GetHammingDistance(*puzzle, *target_puzzle);
+    int h = Heuristics::GetHammingDistance(*puzzle, *target_puzzle);
     ASSERT_EQ(h, 2);
 
     delete puzzle;
     delete target_puzzle;
 }
 
-TEST(HeuristicsTests, Manhattan1) {
+TEST_F(HeuristicsTests, Manhattan1) {
     const std::string field = "3\n"
                               "1 2 3\n"
                               "4 5 6\n"
@@ -64,17 +68,17 @@ TEST(HeuristicsTests, Manhattan1) {
                                      "4 5 6\n"
                                      "7 8 0\n";
 
-    Puzzle<int> *puzzle = CreatePuzzle(field);
-    Puzzle<int> *target_puzzle = CreatePuzzle(target_field);
+    Puzzle *puzzle = HeuristicsTests::CreatePuzzle(field);
+    Puzzle *target_puzzle = HeuristicsTests::CreatePuzzle(target_field);
 
-    int h = Heuristics<int>::GetManhattanDistance(*puzzle, *target_puzzle);
+    int h = Heuristics::GetManhattanDistance(*puzzle, *target_puzzle);
     ASSERT_EQ(h, 1);
 
     delete puzzle;
     delete target_puzzle;
 }
 
-TEST(HeuristicsTests, Manhattan2) {
+TEST_F(HeuristicsTests, Manhattan2) {
     const std::string field = "3\n"
                               "1 2 3\n"
                               "4 5 6\n"
@@ -85,10 +89,10 @@ TEST(HeuristicsTests, Manhattan2) {
                                      "4 5 6\n"
                                      "7 8 0\n";
 
-    Puzzle<int> *puzzle = CreatePuzzle(field);
-    Puzzle<int> *target_puzzle = CreatePuzzle(target_field);
+    Puzzle *puzzle = HeuristicsTests::CreatePuzzle(field);
+    Puzzle *target_puzzle = HeuristicsTests::CreatePuzzle(target_field);
 
-    int h = Heuristics<int>::GetManhattanDistance(*puzzle, *target_puzzle);
+    int h = Heuristics::GetManhattanDistance(*puzzle, *target_puzzle);
     ASSERT_EQ(h, 2);
 
     delete puzzle;
