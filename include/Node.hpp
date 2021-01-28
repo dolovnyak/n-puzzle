@@ -3,139 +3,91 @@
 #include "Puzzle.hpp"
 #include "Heuristics.hpp"
 
-template<class T>
 class Node {
 public:
-    explicit Node(int heuristic);
-
-    Node(const Puzzle<T> &field,
-         const Puzzle<T> &target_field,
-         typename Heuristics<T>::HeuristicFunction heuristic_function,
+    Node(const Puzzle &puzzle,
+         const Puzzle &target_puzzle,
+         Heuristics::Type heuristic_type,
          Node *parent);
 
-    Node(const Puzzle<T> &field,
-         const Puzzle<T> &target_field,
-         typename Heuristics<T>::HeuristicFunction heuristic_function);
+    Node(const Puzzle &puzzle,
+         const Puzzle &target_puzzle,
+         Heuristics::Type heuristic_type);
 
-    Node<T> &operator=(const Node<T> &node);
+    Node &operator=(const Node &node);
 
-    const Puzzle<T> &GetField() const;
+    [[nodiscard]] const Puzzle &GetPuzzle() const;
 
     [[nodiscard]] int GetHeuristic() const;
 
     [[nodiscard]] int GetDepth() const;
 
-    [[nodiscard]] int GetScore() const;
-    
-	[[nodiscard]] Node<T>* GetParent() const;
+//    [[nodiscard]] int GetScore() const;
+
+    [[nodiscard]] Node *GetParent() const;
+
+public:
+    friend std::ostream &operator<<(std::ostream &os, const Node &node) {
+        os << "h: " << node.heuristic_;
+        os << ", d: " << node.depth_;
+        os << ", s: " << node.heuristic_ + node.depth_; // TODO is it really necessary
+        os << std::endl;
+        os << node.GetPuzzle();
+        return os;
+    }
 
 private:
-    Puzzle<T> field_;
+    Puzzle puzzle_;
     Node *parent_;
 
     int depth_;
     int heuristic_;
-    int score_;
+
+private:
+    static int CalculateHeuristics(const Puzzle &puzzle,
+                                   const Puzzle &target_puzzle,
+                                   Heuristics::Type type);
 };
 
-template<class T>
-Node<T>::Node(const Puzzle<T> &field,
-              const Puzzle<T> &target_field,
-              typename Heuristics<T>::HeuristicFunction heuristic_function,
-              Node *parent)
-        :  field_(field),
-           parent_(parent),
-           depth_(parent_ != nullptr ? parent_->depth_ + 1 : 0),
-           heuristic_(heuristic_function(field, target_field)),
-           score_(depth_ + heuristic_) {}
-
-template<class T>
-Node<T>::Node(const Puzzle<T> &field,
-              const Puzzle<T> &target_field,
-              typename Heuristics<T>::HeuristicFunction heuristic_function)
-        : field_(field),
-          parent_(nullptr),
-          depth_(0),
-          heuristic_(heuristic_function(field, target_field)),
-          score_(depth_ + heuristic_) {}
-
-template<class T>
-Node<T>::Node(int heuristic)
-		: parent_(nullptr),
-		  depth_(0),
-		  heuristic_(heuristic),
-		  score_(0) {}
-		  
-template<class T>
-Node<T> &Node<T>::operator=(const Node<T> &node) {
-	if (this == &node)
-		return *this;
-	
-	parent_ = node.parent_;
-	heuristic_ = node.heuristic_;
-	depth_ = node.depth_;
-	score_ = node.score_;
-	field_ = node.field_;
-	
-	return *this;
-}
-
-template<class T>
-const Puzzle<T> &Node<T>::GetField() const {
-    return field_;
-}
-
-template<class T>
-[[nodiscard]] int Node<T>::GetScore() const {
-    return score_;
-}
-
-template<class T>
-[[nodiscard]] int Node<T>::GetHeuristic() const {
-    return heuristic_;
-}
-
-template<class T>
-[[nodiscard]] int Node<T>::GetDepth() const {
-    return depth_;
-}
-
-template<class T>
-[[nodiscard]] Node<T>* Node<T>::GetParent() const
-{
-	return parent_;
-}
-
-template<class T>
-std::ostream &operator<<(std::ostream &os, const Node<T> &node) {
-	os << "h: " << node.GetHeuristic();
-	os << ", d: " << node.GetDepth();
-	os << ", s: " << node.GetScore();
-	os << std::endl;
-    os << node.GetField();
-    return os;
-}
-
-template<class T>
-struct GreaterNodeByScore {
+class OpenSetComparator {
 public:
-	size_t operator()(const Node<T> *firstNode, const Node<T> *secondNode) const {
-		return firstNode->GetScore() > secondNode->GetScore();
-	}
+    enum Type {
+        GreedySearch,
+        UniformSearch,
+        AStarSearch
+    };
+
+    // TODO
+    OpenSetComparator() : type_(AStarSearch) {}
+    explicit OpenSetComparator(Type type) : type_(type) {}
+
+    size_t operator()(const Node *lhs, const Node *rhs) const {
+        switch (type_) {
+            case Type::GreedySearch:
+                return lhs->GetDepth() > rhs->GetDepth();
+            case Type::UniformSearch:
+                return lhs->GetHeuristic() > rhs->GetHeuristic();
+            case Type::AStarSearch:
+                return lhs->GetHeuristic() + lhs->GetDepth() > rhs->GetHeuristic() + rhs->GetDepth();
+            default:
+                throw std::logic_error("Unknown OpenSetComparator::Type");
+        }
+    }
+
+private:
+    Type type_;
 };
 
-template<class T>
-struct HashNodeByField {
+struct HashNodeByPuzzle {
 public:
-	size_t operator()(const Node<T> *node) const {
-		return node->GetField().GetHash();
-	}
+    size_t operator()(const Node *node) const {
+        return node->GetPuzzle().GetHash();
+    }
 };
 
-template<class T>
-struct EqualNodeByField {
+struct EqualNodeByPuzzle {
 public:
-	size_t operator()(const Node<T> *firstNode, const Node<T> *secondNode) const {
-		return firstNode->GetField() == secondNode->GetField();
-	}
+    size_t operator()(const Node *firstNode, const Node *secondNode) const {
+        return firstNode->GetPuzzle() == secondNode->GetPuzzle();
+    }
 };
