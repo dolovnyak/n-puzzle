@@ -8,6 +8,14 @@
 #include "Puzzle.hpp"
 #include "Node.hpp"
 
+enum MoveState
+{
+	Left = 0,
+	Right,
+	Top,
+	Bot
+};
+
 template<class T>
 class Solver {
 public:
@@ -23,38 +31,107 @@ public:
         }
     }
 
-    void Solve(const Puzzle<T> &field, const Puzzle<T> &target_field) {
-        Node<T> current_node(field, target_field, nullptr);
-
-        while (true) {
-            if (current_node.GetField() == target_field)
-                return;
-
-            // check each connected to current node and if closedNodes doesn't contain it, add connected node to openNodes
-
-            closed_nodes_.insert(current_node);
-
-            if (open_nodes_.empty())
-                return; //Error
-
-            current_node = open_nodes_.top();
-            open_nodes_.pop();
+    Puzzle<T> NewFieldByMoveEmptyCell(Puzzle<T> field, MoveState moveState)
+	{
+    	int row = 0 , column = 0;
+    	
+    	field.GetIndexByValue(0, &row, &column);
+    	switch (moveState)
+		{
+			case MoveState::Left:
+				if (column != 0) {
+					field.At(row, column) = field.At(row, column - 1);
+					field.At(row, column - 1) = 0;
+				}
+				break;
+			case MoveState::Right:
+				if (column < field.GetSize() - 1) {
+					field.At(row, column) = field.At(row, column + 1);
+					field.At(row, column + 1) = 0;
+				}
+				break;
+			case MoveState::Top:
+				if (row != 0) {
+					field.At(row, column) = field.At(row - 1, column);
+					field.At(row - 1, column) = 0;
+				}
+				break;
+			case MoveState::Bot:
+				if (row < field.GetSize() - 1) {
+					field.At(row, column) = field.At(row + 1, column);
+					field.At(row + 1, column) = 0;
+				}
+				break;
+			default:
+				break;
+		}
+		
+		return field;
+	}
+    
+    void AddChildrenToOpenNodes(Node<T> *node)
+	{
+    	Node<T> *tmpNode;
+		
+    	for (int i = 0; i < 4; i++)
+		{
+			Puzzle<T> field = NewFieldByMoveEmptyCell(node->GetField(), (MoveState)i);
+			tmpNode = new Node<T>(field, target_field_, heuristic_function_, node);
+			if (closed_nodes_.find(tmpNode) != closed_nodes_.end())
+				delete tmpNode;
+			else
+			{
+//				std::cout << field << std::endl;
+				open_nodes_.push(tmpNode);
+			}
+		}
+	}
+    
+    void Solve(const Puzzle<T> &field, const Puzzle<T> &target_field,
+			   typename Heuristics<T>::HeuristicFunction heuristic_function) {
+				target_field_ = target_field;
+    	heuristic_function_ = heuristic_function;
+    	
+		open_nodes_.push(new Node<T>(field, target_field, heuristic_function));
+		Node<T>* current_node;
+		std::cout << *open_nodes_.top() << std::endl;
+	
+		while (true) {
+			if (open_nodes_.empty())
+			{
+				std::cout << "AAAAA" << std::endl;
+				return; //Error
+			}
+				
+			current_node = open_nodes_.top();
+			open_nodes_.pop();
+			closed_nodes_.insert(current_node);
+			
+			std::cout << *current_node << std::endl;
+			
+			if (current_node->GetField() == target_field_)
+			{
+				std::cout << *current_node;
+				std::cout << "closed nodes: " << closed_nodes_.size() << std::endl;
+				std::cout << "open nodes: " << open_nodes_.size() << std::endl;
+				std::cout << std::endl;
+				while (current_node != nullptr)
+				{
+					std::cout << *current_node << std::endl;
+					current_node = current_node->GetParent();
+				}
+				return;
+			}
+			
+			AddChildrenToOpenNodes(current_node);
         }
-
-
-//    	Node<T> a(field), b(field);
-//    	if (a == b)
-//			closed_nodes_.insert(a);
-//		Puzzle<T> puzzle(3);
-//		closed_nodes_.insert(Node<T>(puzzle));
-//		std::cout << *closed_nodes_.find(a) << std::endl;
-//		std::cout << *closed_nodes_.find(puzzle) << std::endl;
     }
 
 private:
-    std::unordered_set<Node<T>, HashNodeByField<T>> closed_nodes_;
-    std::priority_queue<Node<T>, std::vector<Node<T>>, std::greater<Node<T>>> open_nodes_;
-
+    std::unordered_set<Node<T>*, HashNodeByField<T>, EqualNodeByField<T>> closed_nodes_;
+    std::priority_queue<Node<T>*, std::vector<Node<T>*>, GreaterNodeByScore<T>> open_nodes_;
+	typename Heuristics<T>::HeuristicFunction heuristic_function_;
+	Puzzle<T> target_field_;
     T default_t_;
 
     int CountInversions(const Puzzle<T> &field) {

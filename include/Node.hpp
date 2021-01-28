@@ -19,12 +19,6 @@ public:
 
     Node<T> &operator=(const Node<T> &node);
 
-    bool operator==(const Node<T> &node) const;
-
-    bool operator<(const Node<T> &node) const;
-
-    bool operator>(const Node<T> &node) const;
-
     const Puzzle<T> &GetField() const;
 
     [[nodiscard]] int GetHeuristic() const;
@@ -32,6 +26,8 @@ public:
     [[nodiscard]] int GetDepth() const;
 
     [[nodiscard]] int GetScore() const;
+    
+	[[nodiscard]] Node<T>* GetParent() const;
 
 private:
     Puzzle<T> field_;
@@ -64,8 +60,24 @@ Node<T>::Node(const Puzzle<T> &field,
           score_(depth_ + heuristic_) {}
 
 template<class T>
-bool Node<T>::operator==(const Node<T> &node) const {
-    return field_ == node.field_;
+Node<T>::Node(int heuristic)
+		: parent_(nullptr),
+		  depth_(0),
+		  heuristic_(heuristic),
+		  score_(0) {}
+		  
+template<class T>
+Node<T> &Node<T>::operator=(const Node<T> &node) {
+	if (this == &node)
+		return *this;
+	
+	parent_ = node.parent_;
+	heuristic_ = node.heuristic_;
+	depth_ = node.depth_;
+	score_ = node.score_;
+	field_ = node.field_;
+	
+	return *this;
 }
 
 template<class T>
@@ -89,46 +101,41 @@ template<class T>
 }
 
 template<class T>
-bool Node<T>::operator<(const Node<T> &node) const {
-    return heuristic_ < node.heuristic_;
+[[nodiscard]] Node<T>* Node<T>::GetParent() const
+{
+	return parent_;
 }
 
 template<class T>
-bool Node<T>::operator>(const Node<T> &node) const {
-    return heuristic_ > node.heuristic_;
+std::ostream &operator<<(std::ostream &os, const Node<T> &node) {
+	os << "h: " << node.GetHeuristic();
+	os << ", d: " << node.GetDepth();
+	os << ", s: " << node.GetScore();
+	os << std::endl;
+    os << node.GetField();
+    return os;
 }
 
 template<class T>
-Node<T> &Node<T>::operator=(const Node<T> &node) {
-    if (this == &node)
-        return *this;
-
-    parent_ = node.parent_;
-    heuristic_ = node.heuristic_;
-    depth_ = node.depth_;
-    score_ = node.score_;
-    field_ = node.field_;
-
-    return *this;
-}
-
-template<class T>
-Node<T>::Node(int heuristic)
-        : parent_(nullptr),
-          depth_(0),
-          heuristic_(heuristic),
-          score_(0) {}
+struct GreaterNodeByScore {
+public:
+	size_t operator()(const Node<T> *firstNode, const Node<T> *secondNode) const {
+		return firstNode->GetScore() > secondNode->GetScore();
+	}
+};
 
 template<class T>
 struct HashNodeByField {
 public:
-    size_t operator()(const Node<T> &node) const {
-        return node.GetField().GetHash();
-    }
+	size_t operator()(const Node<T> *node) const {
+		return node->GetField().GetHash();
+	}
 };
 
 template<class T>
-std::ostream &operator<<(std::ostream &os, const Node<T> &node) {
-    os << node.GetField();
-    return os;
-}
+struct EqualNodeByField {
+public:
+	size_t operator()(const Node<T> *firstNode, const Node<T> *secondNode) const {
+		return firstNode->GetField() == secondNode->GetField();
+	}
+};

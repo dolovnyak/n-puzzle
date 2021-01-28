@@ -33,9 +33,9 @@ public:
 
     [[nodiscard]] size_t GetHash() const;
 
-//    [[nodiscard]] size_t GetIndexByValue(T value) const;
-
-//    [[nodiscard]] T GetCellValue(int pos) const;
+    [[nodiscard]] int GetIndexByValue(T value) const;
+    
+	void GetIndexByValue(T value, int *row, int *column) const;
 
     [[nodiscard]] T &At(int pos);
 
@@ -55,11 +55,6 @@ template<class T>
 T &Puzzle<T>::At(int pos) {
     return cells_[pos];
 }
-
-//template<class T>
-//T Puzzle<T>::GetCellValue(int pos) const {
-//    return cells_[pos].value;
-//}
 
 template<class T>
 T &Puzzle<T>::At(int row, int column) {
@@ -103,11 +98,25 @@ size_t Puzzle<T>::GetHash() const {
     return hash;
 }
 
-//template<class T>
-//size_t Puzzle<T>::GetIndexByValue(T value) const {
-//    for (size_t i = 0; i < cells_.size(); i++) {
-//        if (cells_[i].value == value)
-//            return i;
-//    }
-//    throw std::exception(); //TODO handle or remake
-//}
+template<class T>
+int Puzzle<T>::GetIndexByValue(T value) const {
+    for (size_t i = 0; i < cells_.size(); i++) {
+        if (cells_[i] == value)
+            return i;
+    }
+    throw std::exception(); //TODO handle or remake
+}
+
+template<class T>
+void Puzzle<T>::GetIndexByValue(T value, int *row, int *column) const {
+	for (size_t i = 0; i < size_; i++) {
+		for (size_t j = 0; j < size_; j++) {
+			if (cells_[i * size_ + j] == value) {
+				*row = i;
+				*column = j;
+				return;
+			}
+		}
+	}
+	throw std::exception(); //TODO handle or remake
+}

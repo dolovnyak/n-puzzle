@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
                 finishField.At(i) = i + 1;
             finishField.At(finishField.GetSize() * finishField.GetSize() - 1) = 0;
 
-            solver.Solve(*field, finishField);
+            solver.Solve(*field, finishField, Heuristics<int>::GetHammingDistance); //TODO choose heuristic from user input
         } else {
             std::cout << "Oops! Your field is not solvable..." << std::endl;
         }
