@@ -1,9 +1,8 @@
 #include "Solver.hpp"
 
-Solver::Solver(Heuristics::Type heuristics_type)
-        : heuristics_type_(heuristics_type) {}
+int OpenNodesEver = 0;
 
-int Solver::GetZeroRow(const Puzzle &puzzle) {
+static int GetZeroRow(const Puzzle &puzzle) {
     int size = puzzle.GetSize();
 
     for (int row = size - 1; row >= 0; --row) {
@@ -17,7 +16,7 @@ int Solver::GetZeroRow(const Puzzle &puzzle) {
     throw std::logic_error("Not found zero element");
 }
 
-int Solver::CountInversions(const Puzzle &puzzle) {
+static int CountInversions(const Puzzle &puzzle) {
     int inversions = 0;
 
     size_t internalSize = puzzle.GetSize() * puzzle.GetSize();
@@ -32,12 +31,100 @@ int Solver::CountInversions(const Puzzle &puzzle) {
     return inversions;
 }
 
-bool Solver::IsSolvable(const Puzzle &puzzle) {
-    int inversions = CountInversions(puzzle);
-    if (puzzle.GetSize() % 2 != 0) {
-        return inversions % 2 == 0;
+static void AddChildrenNode(Node *parent,
+                     OpenNodes &openNodes,
+                     ClosedNodes &closedNodes,
+                     const IMove &move,
+                     Heuristics::Type heuristicsType) {
+    Puzzle *new_puzzle = move.Execute(parent->GetPuzzle());
+    
+    // Corner zero cell positions
+    if (new_puzzle == nullptr) {
+        return;
+    }
+    
+    Node *temp = new Node(*new_puzzle, heuristicsType, parent);
+    delete new_puzzle;
+    
+    if (closedNodes.find(temp) != closedNodes.end()) {
+        delete temp;
     } else {
-        int zeroRow = GetZeroRow(puzzle);
-        return (inversions + zeroRow) % 2 == 1;
+        openNodes.push(temp);
+        OpenNodesEver++;
+    }
+}
+
+static void AddChildrenNodes(Node *parent,
+                      OpenNodes &openNodes,
+                      ClosedNodes &closedNodes,
+                      Heuristics::Type heuristicsType) {
+    AddChildrenNode(parent, openNodes, closedNodes, MoveLeft(), heuristicsType);
+    AddChildrenNode(parent, openNodes, closedNodes, MoveRight(), heuristicsType);
+    AddChildrenNode(parent, openNodes, closedNodes, MoveDown(), heuristicsType);
+    AddChildrenNode(parent, openNodes, closedNodes, MoveUp(), heuristicsType);
+}
+
+std::vector<Node *> GetSolveNodes(Node *finishNode)
+{
+	std::vector<Node *> nodes;
+	
+	while (finishNode)
+	{
+		nodes.push_back(finishNode);
+		finishNode = finishNode->GetParent();
+	}
+	
+	return nodes;
+}
+
+bool Solver::IsSolvable(const Puzzle &puzzle) {
+	int inversions = CountInversions(puzzle);
+	if (puzzle.GetSize() % 2 != 0) {
+		return inversions % 2 == 0;
+	} else {
+		int zeroRow = GetZeroRow(puzzle);
+		return (inversions + zeroRow) % 2 == 1;
+	}
+}
+
+void Solver::Solve(const Puzzle &puzzle,
+				   Heuristics::Type heuristicsType,
+				   OpenSetComparator::Type algorithmType) {
+    ClosedNodes closedNodes;
+    OpenNodes openNodes = OpenNodes{OpenSetComparator(algorithmType)};
+    openNodes.push(new Node(puzzle, heuristicsType));
+    OpenNodesEver++;
+    
+    Node *currentNode;
+    std::cout << *openNodes.top() << std::endl;
+    while (true) {
+        if (openNodes.empty()) {
+			throw std::runtime_error("map is incorrect");
+        }
+	
+		currentNode = openNodes.top();
+        openNodes.pop();
+        closedNodes.insert(currentNode);
+        
+        if (currentNode->GetPuzzle().IsResolved()) {
+//            std::cout << *currentNode;
+//            std::cout << "closed nodes: " << closedNodes.size() << std::endl;
+//            std::cout << "open nodes: " << openNodes.size() << std::endl;
+//            std::cout << std::endl;
+//            while (currentNode != nullptr) {
+//                std::cout << *currentNode << std::endl;
+//				currentNode = currentNode->GetParent();
+//            }
+			//TODO I now you will burn because of globals and output in this function :)
+			std::vector<Node *> solveNodes = GetSolveNodes(currentNode);
+			std::cout << "Open nodes ever: " << OpenNodesEver << std::endl;
+			std::cout << "Maximum number of nodes: " << openNodes.size() + closedNodes.size() << std::endl;
+			std::cout << "Moves to solve puzzle: " << solveNodes.size() << std::endl;
+			for (int i = solveNodes.size() - 1; i >= 0; i--)
+				std::cout << *solveNodes[i] << std::endl;
+            return;
+        }
+        
+        AddChildrenNodes(currentNode, openNodes, closedNodes, heuristicsType);
     }
 }

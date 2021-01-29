@@ -6,12 +6,10 @@
 class Node {
 public:
     Node(const Puzzle &puzzle,
-         const Puzzle &target_puzzle,
          Heuristics::Type heuristic_type,
          Node *parent);
 
     Node(const Puzzle &puzzle,
-         const Puzzle &target_puzzle,
          Heuristics::Type heuristic_type);
 
     Node &operator=(const Node &node);
@@ -21,8 +19,6 @@ public:
     [[nodiscard]] int GetHeuristic() const;
 
     [[nodiscard]] int GetDepth() const;
-
-//    [[nodiscard]] int GetScore() const;
 
     [[nodiscard]] Node *GetParent() const;
 
@@ -44,9 +40,7 @@ private:
     int heuristic_;
 
 private:
-    static int CalculateHeuristics(const Puzzle &puzzle,
-                                   const Puzzle &target_puzzle,
-                                   Heuristics::Type type);
+    static int CalculateHeuristics(const Puzzle &puzzle, Heuristics::Type type);
 };
 
 class OpenSetComparator {
@@ -57,8 +51,6 @@ public:
         AStarSearch
     };
 
-    // TODO
-    OpenSetComparator() : type_(AStarSearch) {}
     explicit OpenSetComparator(Type type) : type_(type) {}
 
     size_t operator()(const Node *lhs, const Node *rhs) const {

@@ -65,3 +65,26 @@ std::pair<size_t, size_t> Puzzle::GetPosition(int value) const {
     throw std::exception(); //TODO handle or remake
 }
 
+bool Puzzle::IsResolved() const
+{
+	for (size_t i = 0; i < size_ * size_; i++) {
+		if (cells_[i] != i + 1 && cells_[i] != 0) {
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+std::ostream &operator<<(std::ostream &os, const Puzzle &field) {
+	for (size_t row = 0; row < field.GetSize(); ++row) {
+		for (size_t column = 0; column < field.GetSize(); ++column) {
+			if (column != 0) {
+				os << " ";
+			}
+			os << const_cast<Puzzle&>(field).At(row, column);
+		}
+		os << std::endl;
+	}
+	return os;
+}

@@ -23,22 +23,12 @@ public:
     [[nodiscard]] int At(size_t row, size_t column) const;
 
     [[nodiscard]] std::vector<int> GetCells() const;
-
-public:
-    friend std::ostream &operator<<(std::ostream &os, const Puzzle &field) {
-        for (size_t row = 0; row < field.GetSize(); ++row) {
-            for (size_t column = 0; column < field.GetSize(); ++column) {
-                if (column != 0) {
-                    os << " ";
-                }
-                os << const_cast<Puzzle &>(field).At(row, column);
-            }
-            os << std::endl;
-        }
-        return os;
-    }
+    
+	[[nodiscard]] bool IsResolved() const;
 
 private:
     size_t size_;
     std::vector<int> cells_;
 };
+
+std::ostream &operator<<(std::ostream &os, const Puzzle &field);
