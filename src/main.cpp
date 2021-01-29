@@ -96,5 +96,5 @@ int main(int argc, char **argv) {
 		std::cout << e.what();
 	}
 	
-    return 0;
+    exit(0);
 }

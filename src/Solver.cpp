@@ -114,7 +114,7 @@ void Solver::Solve(const Puzzle &puzzle,
 //                std::cout << *currentNode << std::endl;
 //				currentNode = currentNode->GetParent();
 //            }
-			//TODO I now you will burn because of globals and output in this function :)
+			//TODO I know you will burn because of globals and output in this function :)
 			std::vector<Node *> solveNodes = GetSolveNodes(currentNode);
 			for (int i = solveNodes.size() - 1; i >= 0; i--)
 				std::cout << *solveNodes[i] << std::endl;
