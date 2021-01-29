@@ -96,7 +96,6 @@ void Solver::Solve(const Puzzle &puzzle,
     OpenNodesEver++;
     
     Node *currentNode;
-    std::cout << *openNodes.top() << std::endl;
     while (true) {
         if (openNodes.empty()) {
 			throw std::runtime_error("map is incorrect");
@@ -117,11 +116,11 @@ void Solver::Solve(const Puzzle &puzzle,
 //            }
 			//TODO I now you will burn because of globals and output in this function :)
 			std::vector<Node *> solveNodes = GetSolveNodes(currentNode);
+			for (int i = solveNodes.size() - 1; i >= 0; i--)
+				std::cout << *solveNodes[i] << std::endl;
 			std::cout << "Open nodes ever: " << OpenNodesEver << std::endl;
 			std::cout << "Maximum number of nodes: " << openNodes.size() + closedNodes.size() << std::endl;
 			std::cout << "Moves to solve puzzle: " << solveNodes.size() << std::endl;
-			for (int i = solveNodes.size() - 1; i >= 0; i--)
-				std::cout << *solveNodes[i] << std::endl;
             return;
         }
         
