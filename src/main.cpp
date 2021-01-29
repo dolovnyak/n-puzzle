@@ -8,36 +8,62 @@
 #include "Solver.hpp"
 #include "Output.hpp"
 
-int main(int argc, char **argv) {
-    argparse::ArgumentParser program("n-puzzle");
+static Heuristics::Type fromStringToHeuristicType(const std::string &value)
+{
+	if (value == "Manhattan")
+		return Heuristics::Manhattan;
+	if (value == "Hamming")
+		return Heuristics::Hamming;
+	if (value == "LinearConflicts")
+		return Heuristics::LinearConflicts;
+		
+	throw std::runtime_error("Heuristic name doesn't correct");
+}
 
-    program.add_argument("-i", "--input")
+static OpenSetComparator::Type fromStringToAlgorithmType(const std::string &value)
+{
+	if (value == "AStar")
+		return OpenSetComparator::Type::AStarSearch;
+	if (value == "Greedy")
+		return OpenSetComparator::Type::GreedySearch;
+	if (value == "Uniform")
+		return OpenSetComparator::Type::UniformSearch;
+	
+	throw std::runtime_error("Algorithm name doesn't correct");
+}
+
+int main(int argc, char **argv) {
+    argparse::ArgumentParser argumentParser("n-puzzle");
+	
+	argumentParser.add_argument("input_file")
             .required()
             .help("specify the input file.");
 
-    program.add_argument("-h", "--heuristics")
-            .required()
-            .help("specify the heuristics function.");
-
-    try {
-        program.parse_args(argc, argv);
+    argumentParser.add_argument("-h", "--heuristics")
+			.default_value(Heuristics::Manhattan)
+            .help("specify the heuristics function. (Manhattan, Hamming, LinearConflicts), default - Manhattan")
+            .action([](const std::string& value) { return fromStringToHeuristicType(value); });
+    
+	argumentParser.add_argument("-a", "--algorithm")
+			.default_value(OpenSetComparator::Type::AStarSearch)
+			.help("specify the algorithm. (Greedy, AStar, Uniform), default - AStar")
+			.action([](const std::string& value) { return fromStringToAlgorithmType(value); });
+	
+	try {
+		argumentParser.parse_args(argc, argv);
     }
     catch (const std::runtime_error &err) {
         std::cout << err.what() << std::endl;
-        std::cout << program;
+        std::cout << std::endl;
+        std::cout << argumentParser;
         exit(0);
     }
-
-    if (!program.present("-i")) {
-        program.help();
-        return 0;
-    }
-
-    auto inputFile = program.get<std::string>("-i");
+    
+    auto inputFile = argumentParser.get<std::string>("input_file");
     std::ifstream is(inputFile);
     if (!is) {
         std::cout << "Can't open file: " << inputFile << std::endl;
-        return 0;
+        exit(0);
     }
 
     Parser parser;
@@ -47,17 +73,12 @@ int main(int argc, char **argv) {
             throw std::logic_error("Parser returned nullptr.");
         }
 
-        // TODO user heuristics
-        Solver solver(Heuristics::Type::Hamming);
         if (Solver::IsSolvable(*puzzle)) {
-            std::vector<int> cells(puzzle->GetSize() * puzzle->GetSize());
-            for (size_t i = 0; i < puzzle->GetSize() * puzzle->GetSize() - 1; i++)
-                cells[i] = i + 1;
-            cells.back() = 0;
-            Puzzle target_puzzle(puzzle->GetSize(), cells);
-
-            solver.Solve(*puzzle, target_puzzle);
-        } else {
+				Solver::Solve(*puzzle,
+							  argumentParser.get<Heuristics::Type>("-h"),
+							  argumentParser.get<OpenSetComparator::Type>("-a"));
+        }
+        else {
             std::cout << "Oops! Your puzzle is not solvable..." << std::endl;
         }
 
@@ -71,6 +92,9 @@ int main(int argc, char **argv) {
         Output output;
         output.VisualizeParseException(is, parseException);
     }
-
-    return 0;
+    catch (const std::exception &e) {
+		std::cout << e.what();
+	}
+	
+    exit(0);
 }
