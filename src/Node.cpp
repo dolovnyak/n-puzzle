@@ -15,6 +15,8 @@ Node::Node(const Puzzle &puzzle,
           depth_(0),
           heuristic_(CalculateHeuristics(puzzle, heuristic_type)) {}
 
+Node::Node(const Node &node) = default;
+
 Node &Node::operator=(const Node &node) {
     if (this == &node)
         return *this;

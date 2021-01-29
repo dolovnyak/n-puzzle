@@ -2,7 +2,7 @@
 
 #include "Output.hpp"
 
-void Output::VisualizeParseException(std::istream &is, const ParseException &ex) noexcept {
+void Output::PrintParseException(std::istream &is, const ParseException &ex) noexcept {
     // Print exception message with position of invalid field part.
     std::cout << ex.what() << std::endl;
 
@@ -63,4 +63,15 @@ void Output::VisualizeParseException(std::istream &is, const ParseException &ex)
         std::cout << RESET;
         std::cout << std::endl;
     }
+}
+
+void Output::PrintSolveSteps(const Solver::SolverResult &solver_result) {
+    if (solver_result.GetSolution().empty()) {
+        throw std::logic_error("Incorrect solution size.");
+    }
+    for (size_t i = solver_result.GetSolution().size(); i > 0; --i)
+        std::cout << *solver_result.GetSolution()[i - 1] << std::endl;
+    std::cout << "Open nodes ever: " << solver_result.GetTotalOpenNodesCount() << std::endl;
+    std::cout << "Maximum number of nodes: " << solver_result.GetTotalNodesCount() << std::endl;
+    std::cout << "Moves to solve puzzle: " << solver_result.GetSolution().size() << std::endl;
 }

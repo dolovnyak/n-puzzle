@@ -12,6 +12,8 @@ public:
     Node(const Puzzle &puzzle,
          Heuristics::Type heuristic_type);
 
+    Node(const Node &node);
+
     Node &operator=(const Node &node);
 
     [[nodiscard]] const Puzzle &GetPuzzle() const;

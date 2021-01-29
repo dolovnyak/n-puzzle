@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
 project(n_puzzle)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 find_package(GTest REQUIRED)
 

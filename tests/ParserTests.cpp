@@ -21,7 +21,7 @@ TEST(ParserTests, InvalidField_EmptyInput) {
         std::stringstream iss2;
         iss2 << input;
         Output output;
-        output.VisualizeParseException(iss2, ex);
+        output.PrintParseException(iss2, ex);
     }
 }
 
@@ -39,7 +39,7 @@ TEST(ParserTests, InvalidField_OneComment) {
         std::stringstream iss2;
         iss2 << input;
         Output output;
-        output.VisualizeParseException(iss2, ex);
+        output.PrintParseException(iss2, ex);
     }
 }
 
@@ -58,7 +58,7 @@ TEST(ParserTests, InvalidField_ZeroSize) {
         std::stringstream iss2;
         iss2 << input;
         Output output;
-        output.VisualizeParseException(iss2, ex);
+        output.PrintParseException(iss2, ex);
     }
 }
 
@@ -77,7 +77,7 @@ TEST(ParserTests, InvalidField_NegativeSize) {
         std::stringstream iss2;
         iss2 << input;
         Output output;
-        output.VisualizeParseException(iss2, ex);
+        output.PrintParseException(iss2, ex);
     }
 }
 
@@ -96,7 +96,7 @@ TEST(ParserTests, InvalidField_TooSmallSize) {
         std::stringstream iss2;
         iss2 << input;
         Output output;
-        output.VisualizeParseException(iss2, ex);
+        output.PrintParseException(iss2, ex);
     }
 }
 
@@ -115,7 +115,7 @@ TEST(ParserTests, InvalidField_WrongSize) {
         std::stringstream iss2;
         iss2 << input;
         Output output;
-        output.VisualizeParseException(iss2, ex);
+        output.PrintParseException(iss2, ex);
     }
 }
 
@@ -134,7 +134,7 @@ TEST(ParserTests, InvalidField_OverflowSize) {
         std::stringstream iss2;
         iss2 << input;
         Output output;
-        output.VisualizeParseException(iss2, ex);
+        output.PrintParseException(iss2, ex);
     }
 }
 
@@ -154,7 +154,7 @@ TEST(ParserTests, InvalidField_WrongColumnSize) {
         std::stringstream iss2;
         iss2 << input;
         Output output;
-        output.VisualizeParseException(iss2, ex);
+        output.PrintParseException(iss2, ex);
     }
 }
 
@@ -175,7 +175,7 @@ TEST(ParserTests, InvalidField_WrongRowSize1) {
         std::stringstream iss2;
         iss2 << input;
         Output output;
-        output.VisualizeParseException(iss2, ex);
+        output.PrintParseException(iss2, ex);
     }
 }
 
@@ -197,7 +197,7 @@ TEST(ParserTests, InvalidField_WrongRowSize2) {
         std::stringstream iss2;
         iss2 << input;
         Output output;
-        output.VisualizeParseException(iss2, ex);
+        output.PrintParseException(iss2, ex);
     }
 }
 
@@ -218,7 +218,7 @@ TEST(ParserTests, InvalidField_EmptyCell) {
         std::stringstream iss2;
         iss2 << input;
         Output output;
-        output.VisualizeParseException(iss2, ex);
+        output.PrintParseException(iss2, ex);
     }
 }
 
@@ -239,7 +239,7 @@ TEST(ParserTests, InvalidField_InvalidSymbol1) {
         std::stringstream iss2;
         iss2 << input;
         Output output;
-        output.VisualizeParseException(iss2, ex);
+        output.PrintParseException(iss2, ex);
     }
 }
 
@@ -260,7 +260,7 @@ TEST(ParserTests, InvalidField_InvalidSymbol2) {
         std::stringstream iss2;
         iss2 << input;
         Output output;
-        output.VisualizeParseException(iss2, ex);
+        output.PrintParseException(iss2, ex);
     }
 }
 
@@ -283,7 +283,7 @@ TEST(ParserTests, InvalidField_InvalidSymbol3) {
         std::stringstream iss2;
         iss2 << input;
         Output output;
-        output.VisualizeParseException(iss2, ex);
+        output.PrintParseException(iss2, ex);
     }
 }
 
@@ -305,7 +305,7 @@ TEST(ParserTests, InvalidField_InvalidSymbol4) {
         std::stringstream iss2;
         iss2 << input;
         Output output;
-        output.VisualizeParseException(iss2, ex);
+        output.PrintParseException(iss2, ex);
     }
 }
 
@@ -329,7 +329,7 @@ TEST(ParserTests, InvalidField_InvalidCell1) {
         std::stringstream iss2;
         iss2 << input;
         Output output;
-        output.VisualizeParseException(iss2, ex);
+        output.PrintParseException(iss2, ex);
     }
 }
 
@@ -353,7 +353,7 @@ TEST(ParserTests, InvalidField_InvalidCell2) {
         std::stringstream iss2;
         iss2 << input;
         Output output;
-        output.VisualizeParseException(iss2, ex);
+        output.PrintParseException(iss2, ex);
     }
 }
 
@@ -377,7 +377,7 @@ TEST(ParserTests, InvalidField_InvalidCell3) {
         std::stringstream iss2;
         iss2 << input;
         Output output;
-        output.VisualizeParseException(iss2, ex);
+        output.PrintParseException(iss2, ex);
     }
 }
 

@@ -1,5 +1,10 @@
 #pragma once
 
+#include <vector>
+
+#include "Node.hpp"
+#include "Solver.hpp"
+
 #define RESET   "\033[0m"
 
 #define FOREGROUND_BLACK   "\033[30m"
@@ -26,5 +31,6 @@
 
 class Output {
 public:
-    void VisualizeParseException(std::istream &is, const ParseException &ex) noexcept;
+    void PrintParseException(std::istream &is, const ParseException &ex) noexcept;
+    void PrintSolveSteps(const Solver::SolverResult &solver_result);
 };

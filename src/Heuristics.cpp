@@ -26,7 +26,7 @@ int Heuristics::GetHammingDistance(const Puzzle &field) {
     int heuristics = 0;
 
     for (size_t i = 0; i < field.GetSize() * field.GetSize(); ++i) {
-        if (field.At(i) != i + 1 && field.At(i) != 0)
+        if (static_cast<unsigned int>(field.At(i)) != i + 1 && field.At(i) != 0)
             ++heuristics;
     }
 

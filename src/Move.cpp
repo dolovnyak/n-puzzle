@@ -1,49 +1,18 @@
 #include "Move.hpp"
 
-Puzzle *MoveLeft::Execute(const Puzzle &puzzle) const {
-    std::vector<int> cells = puzzle.GetCells();
-    const auto& [row, column] = puzzle.GetPosition(0);
+Move::Move(int dx, int dy)
+        : dx(dx),
+          dy(dy) {}
 
-    if (column == 0) {
+Puzzle *Move::Execute(const Puzzle &puzzle) const {
+    std::vector<int> cells = puzzle.GetCells();
+    const auto[row, column] = puzzle.GetPosition(0);
+
+    if (column + dx < 0 || column + dx >= puzzle.GetSize()
+        || row + dy < 0 || row + dy >= puzzle.GetSize()) {
         return nullptr;
     }
 
-    std::swap(cells[row * puzzle.GetSize() + column], cells[row * puzzle.GetSize() + column - 1]);
-    return new Puzzle(puzzle.GetSize(), cells);
-}
-
-Puzzle *MoveRight::Execute(const Puzzle &puzzle) const {
-    std::vector<int> cells = puzzle.GetCells();
-    const auto& [row, column] = puzzle.GetPosition(0);
-
-    if (column == puzzle.GetSize() - 1) {
-        return nullptr;
-    }
-
-    std::swap(cells[row * puzzle.GetSize() + column], cells[row * puzzle.GetSize() + column + 1]);
-    return new Puzzle(puzzle.GetSize(), cells);
-}
-
-Puzzle *MoveDown::Execute(const Puzzle &puzzle) const {
-    std::vector<int> cells = puzzle.GetCells();
-    const auto& [row, column] = puzzle.GetPosition(0);
-
-    if (row == 0) {
-        return nullptr;
-    }
-
-    std::swap(cells[row * puzzle.GetSize() + column], cells[(row - 1) * puzzle.GetSize() + column]);
-    return new Puzzle(puzzle.GetSize(), cells);
-}
-
-Puzzle *MoveUp::Execute(const Puzzle &puzzle) const {
-    std::vector<int> cells = puzzle.GetCells();
-    const auto& [row, column] = puzzle.GetPosition(0);
-
-    if (row == puzzle.GetSize() - 1) {
-        return nullptr;
-    }
-
-    std::swap(cells[row * puzzle.GetSize() + column], cells[(row + 1) * puzzle.GetSize() + column]);
+    std::swap(cells[row * puzzle.GetSize() + column], cells[(row + dy) * puzzle.GetSize() + column + dx]);
     return new Puzzle(puzzle.GetSize(), cells);
 }

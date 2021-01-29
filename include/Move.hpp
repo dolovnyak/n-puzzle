@@ -2,27 +2,13 @@
 
 #include "Puzzle.hpp"
 
-class IMove {
+class Move {
 public:
-    [[nodiscard]] virtual Puzzle *Execute(const Puzzle &puzzle) const = 0;
-};
+    Move(int dx, int dy);
 
-class MoveLeft : public IMove {
-public:
-    [[nodiscard]] Puzzle *Execute(const Puzzle &puzzle) const override;
-};
+    [[nodiscard]] Puzzle *Execute(const Puzzle &puzzle) const;
 
-class MoveRight : public IMove {
-public:
-    [[nodiscard]] Puzzle *Execute(const Puzzle &puzzle) const override;
-};
-
-class MoveDown : public IMove {
-public:
-    [[nodiscard]] Puzzle *Execute(const Puzzle &puzzle) const override;
-};
-
-class MoveUp : public IMove {
-public:
-    [[nodiscard]] Puzzle *Execute(const Puzzle &puzzle) const override;
+private:
+    int dx;
+    int dy;
 };
