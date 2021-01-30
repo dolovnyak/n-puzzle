@@ -10,7 +10,7 @@ void Solver::AddChild(Node *parent,
         return;
     }
 
-    Node *temp = new Node(*new_puzzle, heuristics_type_, parent);
+    Node *temp = new Node(*new_puzzle, heuristics_type_, state.target_puzzle, parent);
     delete new_puzzle;
 
     if (state.closed_nodes.find(temp) != state.closed_nodes.end()) {
@@ -60,11 +60,10 @@ Solver::Solver(Heuristics::Type heuristics_type, OpenSetComparator::Type algorit
         : heuristics_type_(heuristics_type),
           algorithm_type_(algorithm_type) {}
 
-Solver::SolverResult Solver::Solve(const Puzzle &puzzle) {
-    const auto &target = Puzzle::GetSnailPuzzle(puzzle.GetSize());
-    SolverState state(algorithm_type_);
+Solver::SolverResult Solver::Solve(const Puzzle &puzzle, const Puzzle &targetPuzzle) {
+    SolverState state(algorithm_type_, targetPuzzle);
 
-    state.open_nodes.push(new Node(puzzle, heuristics_type_));
+    state.open_nodes.push(new Node(puzzle, heuristics_type_, targetPuzzle));
     ++state.total_open_nodes_count;
 
     Node *current_node;
@@ -77,7 +76,7 @@ Solver::SolverResult Solver::Solve(const Puzzle &puzzle) {
         state.open_nodes.pop();
         state.closed_nodes.insert(current_node);
 
-        if (current_node->GetPuzzle() == target) {
+        if (current_node->GetPuzzle() == targetPuzzle) {
             return SolverResult(state.total_open_nodes_count,
                                 state.open_nodes.size() + state.closed_nodes.size(),
                                 GetSolution(current_node));

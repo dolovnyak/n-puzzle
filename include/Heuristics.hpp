@@ -10,9 +10,11 @@ public:
         LinearConflicts
     };
 
-    static int GetManhattanDistance(const Puzzle &field);
+    static int GetManhattanDistance(const Puzzle &puzzle, const Puzzle &target_puzzle);
 
-    static int GetHammingDistance(const Puzzle &field);
+    static int GetHammingDistance(const Puzzle &puzzle, const Puzzle &target_puzzle);
+    
+    static int GetLinearConflicts(const Puzzle &puzzle, const Puzzle &target_puzzle);
 
 private:
     Heuristics() = default;

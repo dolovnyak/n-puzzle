@@ -49,18 +49,20 @@ public:
 
     static bool IsSolvable(const Puzzle &puzzle, const Puzzle &target);
 
-    SolverResult Solve(const Puzzle &puzzle);
+    SolverResult Solve(const Puzzle &puzzle, const Puzzle &targetPuzzle);
 
 private:
     struct SolverState {
         size_t total_open_nodes_count;
         OpenNodes open_nodes;
         ClosedNodes closed_nodes;
+        Puzzle target_puzzle;
 
-        explicit SolverState(OpenSetComparator::Type algorithm_type)
+        explicit SolverState(OpenSetComparator::Type algorithm_type, const Puzzle &target)
                 : total_open_nodes_count(0),
                   open_nodes(OpenNodes{OpenSetComparator(algorithm_type)}),
-                  closed_nodes() {}
+                  closed_nodes(),
+                  target_puzzle(target) {}
 
         virtual ~SolverState() {
             while (!open_nodes.empty()) {

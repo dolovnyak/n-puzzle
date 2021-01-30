@@ -7,10 +7,12 @@ class Node {
 public:
     Node(const Puzzle &puzzle,
          Heuristics::Type heuristic_type,
+         const Puzzle &target_puzzle,
          Node *parent);
-
+			
     Node(const Puzzle &puzzle,
-         Heuristics::Type heuristic_type);
+         Heuristics::Type heuristic_type,
+         const Puzzle &target_puzzle);
 
     Node(const Node &node);
 
@@ -42,7 +44,7 @@ private:
     int heuristic_;
 
 private:
-    static int CalculateHeuristics(const Puzzle &puzzle, Heuristics::Type type);
+    static int CalculateHeuristics(const Puzzle &puzzle, Heuristics::Type type, const Puzzle &target_puzzle);
 };
 
 class OpenSetComparator {
@@ -63,8 +65,6 @@ public:
                 return lhs->GetHeuristic() > rhs->GetHeuristic();
             case Type::AStarSearch:
                 return lhs->GetHeuristic() + lhs->GetDepth() > rhs->GetHeuristic() + rhs->GetDepth();
-            default:
-                throw std::logic_error("Unknown OpenSetComparator::Type");
         }
     }
 

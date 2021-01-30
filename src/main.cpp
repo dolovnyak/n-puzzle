@@ -104,8 +104,8 @@ int main(int argc, char **argv) {
 		Solver solver(argumentParser.get<Heuristics::Type>("-h"),
 					  argumentParser.get<OpenSetComparator::Type>("-a"));
 		
-		if (solver.IsSolvable(*startPuzzle)) {
-			const auto& result = solver.Solve(*startPuzzle);
+		if (solver.IsSolvable(*startPuzzle, *targetPuzzle)) {
+			const auto& result = solver.Solve(*startPuzzle, *targetPuzzle);
 			output.PrintSolveSteps(result);
 		}
 		else {
