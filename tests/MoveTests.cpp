@@ -7,7 +7,7 @@
 class MoveTests : public ::testing::Test {
 public:
     static void TestInvalidMove(const std::string &input,
-                         const IMove &move) {
+                         const Move &move) {
         Puzzle *puzzle = CreatePuzzle(input);
         Puzzle *new_puzzle = move.Execute(*puzzle);
 
@@ -19,7 +19,7 @@ public:
 
     static void TestValidMove(const std::string &input,
                        const std::string &input_target,
-                       const IMove &move) {
+                       const Move &move) {
         Puzzle *puzzle = CreatePuzzle(input);
         Puzzle *target = CreatePuzzle(input_target);
 
@@ -47,7 +47,7 @@ TEST_F(MoveTests, MoveLeft_Wrong1) {
                               "4 5 6\n"
                               "0 8 7\n";
 
-    MoveTests::TestInvalidMove(input, MoveLeft());
+    MoveTests::TestInvalidMove(input, Move(-1, 0));
 }
 
 TEST_F(MoveTests, MoveLeft_Wrong2) {
@@ -56,7 +56,7 @@ TEST_F(MoveTests, MoveLeft_Wrong2) {
                               "4 5 6\n"
                               "1 8 7\n";
 
-    MoveTests::TestInvalidMove(input, MoveLeft());
+    MoveTests::TestInvalidMove(input, Move(-1, 0));
 }
 
 TEST_F(MoveTests, MoveDown_Wrong1) {
@@ -65,7 +65,7 @@ TEST_F(MoveTests, MoveDown_Wrong1) {
                               "4 5 6\n"
                               "1 8 7\n";
 
-    MoveTests::TestInvalidMove(input, MoveDown());
+    MoveTests::TestInvalidMove(input, Move(0, -1));
 }
 
 TEST_F(MoveTests, MoveDown_Wrong2) {
@@ -74,7 +74,7 @@ TEST_F(MoveTests, MoveDown_Wrong2) {
                               "4 5 6\n"
                               "7 8 3\n";
 
-    MoveTests::TestInvalidMove(input, MoveDown());
+    MoveTests::TestInvalidMove(input, Move(0, -1));
 }
 
 TEST_F(MoveTests, MoveRight_Wrong1) {
@@ -83,7 +83,7 @@ TEST_F(MoveTests, MoveRight_Wrong1) {
                               "4 5 6\n"
                               "7 8 3\n";
 
-    MoveTests::TestInvalidMove(input, MoveRight());
+    MoveTests::TestInvalidMove(input, Move(1, 0));
 }
 
 TEST_F(MoveTests, MoveRight_Wrong2) {
@@ -92,7 +92,7 @@ TEST_F(MoveTests, MoveRight_Wrong2) {
                               "4 5 6\n"
                               "7 8 0\n";
 
-    MoveTests::TestInvalidMove(input, MoveRight());
+    MoveTests::TestInvalidMove(input, Move(1, 0));
 }
 
 TEST_F(MoveTests, MoveUp_Wrong1) {
@@ -101,7 +101,7 @@ TEST_F(MoveTests, MoveUp_Wrong1) {
                               "4 5 6\n"
                               "0 8 1\n";
 
-    MoveTests::TestInvalidMove(input, MoveUp());
+    MoveTests::TestInvalidMove(input, Move(0, 1));
 }
 
 TEST_F(MoveTests, MoveUp_Wrong2) {
@@ -110,7 +110,7 @@ TEST_F(MoveTests, MoveUp_Wrong2) {
                               "4 5 6\n"
                               "7 8 0\n";
 
-    MoveTests::TestInvalidMove(input, MoveUp());
+    MoveTests::TestInvalidMove(input, Move(0, 1));
 }
 
 TEST_F(MoveTests, MoveUp_Ok1) {
@@ -123,7 +123,7 @@ TEST_F(MoveTests, MoveUp_Ok1) {
                                "4 8 6\n"
                                "7 0 3\n";
 
-    MoveTests::TestValidMove(input, target, MoveUp());
+    MoveTests::TestValidMove(input, target, Move(0, 1));
 }
 
 TEST_F(MoveTests, MoveUp_Ok2) {
@@ -136,7 +136,7 @@ TEST_F(MoveTests, MoveUp_Ok2) {
                                "4 0 6\n"
                                "7 8 3\n";
 
-    MoveTests::TestValidMove(input, target, MoveUp());
+    MoveTests::TestValidMove(input, target, Move(0, 1));
 }
 
 TEST_F(MoveTests, MoveLeft_Ok1) {
@@ -149,7 +149,7 @@ TEST_F(MoveTests, MoveLeft_Ok1) {
                                "0 4 6\n"
                                "7 8 3\n";
 
-    MoveTests::TestValidMove(input, target, MoveLeft());
+    MoveTests::TestValidMove(input, target, Move(-1, 0));
 }
 
 TEST_F(MoveTests, MoveLeft_Ok2) {
@@ -162,7 +162,7 @@ TEST_F(MoveTests, MoveLeft_Ok2) {
                                "6 0 4\n"
                                "7 8 3\n";
 
-    MoveTests::TestValidMove(input, target, MoveLeft());
+    MoveTests::TestValidMove(input, target, Move(-1, 0));
 }
 
 TEST_F(MoveTests, MoveDown_Ok1) {
@@ -175,7 +175,7 @@ TEST_F(MoveTests, MoveDown_Ok1) {
                                "4 2 6\n"
                                "7 8 3\n";
 
-    MoveTests::TestValidMove(input, target, MoveDown());
+    MoveTests::TestValidMove(input, target, Move(0, -1));
 }
 
 TEST_F(MoveTests, MoveDown_Ok2) {
@@ -188,7 +188,7 @@ TEST_F(MoveTests, MoveDown_Ok2) {
                                "4 0 6\n"
                                "7 8 3\n";
 
-    MoveTests::TestValidMove(input, target, MoveDown());
+    MoveTests::TestValidMove(input, target, Move(0, -1));
 }
 
 TEST_F(MoveTests, MoveRight_Ok1) {
@@ -201,7 +201,7 @@ TEST_F(MoveTests, MoveRight_Ok1) {
                                "4 6 0\n"
                                "7 8 3\n";
 
-    MoveTests::TestValidMove(input, target, MoveRight());
+    MoveTests::TestValidMove(input, target, Move(1, 0));
 }
 
 TEST_F(MoveTests, MoveRight_Ok2) {
@@ -214,5 +214,5 @@ TEST_F(MoveTests, MoveRight_Ok2) {
                                "6 0 4\n"
                                "7 8 3\n";
 
-    MoveTests::TestValidMove(input, target, MoveRight());
+    MoveTests::TestValidMove(input, target, Move(1, 0));
 }
