@@ -11,6 +11,17 @@ class SolvableTests : public ::testing::Test {
 public:
     const static std::vector<std::string> solvable_input_files;
     const static std::vector<std::string> unsolvable_input_files;
+
+    static void CheckIsSolvable(const std::string &filename, bool solvable) {
+        Parser parser;
+        std::ifstream is("../../resources/fields/" + filename);
+        Puzzle *p = parser.Parse(is);
+        Puzzle tp = Puzzle::GetSnailPuzzle(p->GetSize());
+        bool s = Solver::IsSolvable(*p, tp);
+        std::cout << filename << ": " << s << std::endl;
+        ASSERT_EQ(s, solvable);
+        delete p;
+    }
 };
 
 const std::vector<std::string> SolvableTests::solvable_input_files = {
@@ -60,28 +71,14 @@ const std::vector<std::string> SolvableTests::unsolvable_input_files = {
 };
 
 TEST_F(SolvableTests, Solvable) {
-    Parser parser;
     for (const auto &filename : solvable_input_files) {
-        std::ifstream is("../../resources/fields/" + filename);
-        Puzzle *p = parser.Parse(is);
-        Puzzle tp = Puzzle::GetSnailPuzzle(p->GetSize());
-        bool s = Solver::IsSolvable(*p, tp);
-        std::cout << filename << ": " << s << std::endl;
-        ASSERT_TRUE(s);
-        delete p;
+        CheckIsSolvable(filename, true);
     }
 }
 
 TEST_F(SolvableTests, Unsolvable) {
-    Parser parser;
     for (const auto &filename : unsolvable_input_files) {
-        std::ifstream is("../../resources/fields/" + filename);
-        Puzzle *p = parser.Parse(is);
-        Puzzle tp = Puzzle::GetSnailPuzzle(p->GetSize());
-        bool s = Solver::IsSolvable(*p, tp);
-        std::cout << filename << ": " << s << std::endl;
-        ASSERT_FALSE(s);
-        delete p;
+        CheckIsSolvable(filename, false);
     }
 }
 

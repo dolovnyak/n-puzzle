@@ -44,11 +44,16 @@ bool Solver::IsSolvable(const Puzzle &puzzle, const Puzzle &target) {
     int inversions = Puzzle::CountInversions(puzzle);
     int target_inversions = Puzzle::CountInversions(target);
 
-    if (puzzle.GetSize() % 2 == 0) {
-        inversions += std::get<1>(puzzle.GetPosition(0));
-        target_inversions += std::get<1>(target.GetPosition(0));
+    if (puzzle.GetSize() & 1) {
+        return inversions % 2 == target_inversions % 2;
+    } else {
+        size_t row = puzzle.GetSize() - std::get<1>(puzzle.GetPosition(0));
+        if (row & 1) {
+            return inversions % 2 == target_inversions % 2;
+        } else {
+            return inversions % 2 != target_inversions % 2;
+        }
     }
-    return inversions % 2 == target_inversions % 2;
 }
 
 Solver::Solver(Heuristics::Type heuristics_type, OpenSetComparator::Type algorithm_type)
