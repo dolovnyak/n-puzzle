@@ -58,6 +58,20 @@ TEST_F(HeuristicsTests, Hamming2) {
     TestHeuristics(field, target_field, Heuristics::GetHammingDistance, 2);
 }
 
+TEST_F(HeuristicsTests, Hamming3) {
+    const std::string field = "3\n"
+                              "4 1 3\n"
+                              "2 5 7\n"
+                              "0 6 8\n";
+
+    const std::string target_field = "3\n"
+                                     "1 2 3\n"
+                                     "8 0 4\n"
+                                     "7 6 5\n";
+
+    TestHeuristics(field, target_field, Heuristics::GetHammingDistance, 6);
+}
+
 TEST_F(HeuristicsTests, Manhattan1) {
     const std::string field = "3\n"
                               "1 2 3\n"
@@ -84,4 +98,18 @@ TEST_F(HeuristicsTests, Manhattan2) {
                                      "7 8 0\n";
 
     TestHeuristics(field, target_field, Heuristics::GetManhattanDistance, 2);
+}
+
+TEST_F(HeuristicsTests, Manhattan3) {
+    const std::string field = "3\n"
+                              "1 2 5\n"
+                              "3 0 6\n"
+                              "7 4 8\n";
+
+    const std::string target_field = "3\n"
+                                     "1 2 3\n"
+                                     "4 5 6\n"
+                                     "7 8 0\n";
+
+    TestHeuristics(field, target_field, Heuristics::GetManhattanDistance, 8);
 }
