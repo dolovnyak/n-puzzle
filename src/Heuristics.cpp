@@ -21,7 +21,7 @@ int Heuristics::GetManhattanDistance(const Puzzle &puzzle, const Puzzle &target_
     return heuristics;
 }
 
-static int GetLinearConflicts(const Puzzle &puzzle, const Puzzle &target_puzzle)
+int Heuristics::GetLinearConflicts(const Puzzle &puzzle, const Puzzle &target_puzzle)
 {
 	int heuristics = 0;
 	
