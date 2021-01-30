@@ -10,7 +10,7 @@ void SolvableCheckerTestWrapper(const std::string &input, bool expectedResult) {
 
     Parser field_parser;
     Puzzle *field = field_parser.Parse(iss);
-    Solver solver(Heuristics::Type::Hamming);
+    Solver solver(Heuristics::Type::Hamming, OpenSetComparator::AStarSearch);
     ASSERT_EQ(solver.IsSolvable(*field), expectedResult);
     delete field;
 }

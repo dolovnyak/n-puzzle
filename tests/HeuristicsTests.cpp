@@ -29,7 +29,7 @@ TEST_F(HeuristicsTests, Hamming1) {
     Puzzle *puzzle = HeuristicsTests::CreatePuzzle(field);
     Puzzle *target_puzzle = HeuristicsTests::CreatePuzzle(target_field);
 
-    int h = Heuristics::GetHammingDistance(*puzzle, *target_puzzle);
+    int h = Heuristics::GetHammingDistance(*puzzle);
     ASSERT_EQ(h, 1);
 
     delete puzzle;
@@ -50,7 +50,7 @@ TEST_F(HeuristicsTests, Hamming2) {
     Puzzle *puzzle = HeuristicsTests::CreatePuzzle(field);
     Puzzle *target_puzzle = HeuristicsTests::CreatePuzzle(target_field);
 
-    int h = Heuristics::GetHammingDistance(*puzzle, *target_puzzle);
+    int h = Heuristics::GetHammingDistance(*puzzle);
     ASSERT_EQ(h, 2);
 
     delete puzzle;
@@ -71,7 +71,7 @@ TEST_F(HeuristicsTests, Manhattan1) {
     Puzzle *puzzle = HeuristicsTests::CreatePuzzle(field);
     Puzzle *target_puzzle = HeuristicsTests::CreatePuzzle(target_field);
 
-    int h = Heuristics::GetManhattanDistance(*puzzle, *target_puzzle);
+    int h = Heuristics::GetManhattanDistance(*puzzle);
     ASSERT_EQ(h, 1);
 
     delete puzzle;
@@ -92,7 +92,7 @@ TEST_F(HeuristicsTests, Manhattan2) {
     Puzzle *puzzle = HeuristicsTests::CreatePuzzle(field);
     Puzzle *target_puzzle = HeuristicsTests::CreatePuzzle(target_field);
 
-    int h = Heuristics::GetManhattanDistance(*puzzle, *target_puzzle);
+    int h = Heuristics::GetManhattanDistance(*puzzle);
     ASSERT_EQ(h, 2);
 
     delete puzzle;

@@ -62,7 +62,7 @@ std::tuple<size_t, size_t> Puzzle::GetPosition(int value) const {
             }
         }
     }
-    throw std::exception(); //TODO handle or remake
+    throw std::logic_error("Get position - incorrect value"); //TODO handle error in main
 }
 
 Puzzle Puzzle::CreateSnailPuzzle(size_t size) {
@@ -98,7 +98,7 @@ Puzzle Puzzle::CreateSnailPuzzle(size_t size) {
 std::map<size_t, Puzzle> Puzzle::target_puzzles_;
 
 const Puzzle &Puzzle::GetSnailPuzzle(size_t size) {
-    if (!target_puzzles_.contains(size)) {
+    if (target_puzzles_.find(size) != target_puzzles_.end()) {
         target_puzzles_.insert(std::pair<size_t, Puzzle>(size, CreateSnailPuzzle(size)));
     }
     return target_puzzles_.at(size);

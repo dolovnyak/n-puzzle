@@ -1,8 +1,6 @@
 #include <iostream>
 #include <fstream>
 
-#include <boost/algorithm/string.hpp>
-
 #include "argparse/argparse.hpp"
 
 #include "Parser.hpp"
@@ -11,22 +9,28 @@
 #include "Output.hpp"
 
 static Heuristics::Type fromStringToHeuristicType(const std::string &value) {
-    if (boost::iequals(value, "manhattan"))
+	std::string lowerCaseValue = value;
+	std::transform(lowerCaseValue.begin(), lowerCaseValue.end(), lowerCaseValue.begin(),
+				   [](unsigned char c){ return std::tolower(c); });
+    if (lowerCaseValue == "manhattan")
         return Heuristics::Manhattan;
-    if (boost::iequals(value, "hamming"))
+    if (lowerCaseValue == "hamming")
         return Heuristics::Hamming;
-    if (boost::iequals(value, "linear_conflicts"))
+    if (lowerCaseValue == "linear_conflicts")
         return Heuristics::LinearConflicts;
 
     throw std::runtime_error("Heuristic name isn't correct.");
 }
 
 static OpenSetComparator::Type fromStringToAlgorithmType(const std::string &value) {
-    if (boost::iequals(value, "a-star"))
+	std::string lowerCaseValue = value;
+	std::transform(lowerCaseValue.begin(), lowerCaseValue.end(), lowerCaseValue.begin(),
+				   [](unsigned char c){ return std::tolower(c); });
+    if (lowerCaseValue == "a-star")
         return OpenSetComparator::Type::AStarSearch;
-    if (boost::iequals(value, "greedy"))
+    if (lowerCaseValue == "greedy")
         return OpenSetComparator::Type::GreedySearch;
-    if (boost::iequals(value, "uniform"))
+    if (lowerCaseValue == "uniform")
         return OpenSetComparator::Type::UniformSearch;
 
     throw std::runtime_error("Algorithm name isn't correct.");
