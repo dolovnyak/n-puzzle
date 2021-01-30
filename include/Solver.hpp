@@ -47,7 +47,7 @@ public:
 
     Solver(Heuristics::Type heuristicsType, OpenSetComparator::Type algorithmType);
 
-    static bool IsSolvable(const Puzzle &puzzle);
+    static bool IsSolvable(const Puzzle &puzzle, const Puzzle &target);
 
     SolverResult Solve(const Puzzle &puzzle);
 

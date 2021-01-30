@@ -55,13 +55,10 @@ static inline std::vector<Node *> GetSolution(Node *final_node) {
     return nodes;
 }
 
-bool Solver::IsSolvable(const Puzzle &puzzle) {
-    const auto &target = Puzzle::GetSnailPuzzle(puzzle.GetSize());
+bool Solver::IsSolvable(const Puzzle &puzzle, const Puzzle &target) {
+    int inversions = Puzzle::CountInversions(puzzle);
+    int target_inversions = Puzzle::CountInversions(target);
 
-    int inversions = CountInversions(puzzle);
-    int target_inversions = CountInversions(target);
-
-    // TODO incorrect for even numbers
     if (puzzle.GetSize() % 2 == 0) {
         inversions += std::get<1>(puzzle.GetPosition(0));
         target_inversions += std::get<1>(target.GetPosition(0));

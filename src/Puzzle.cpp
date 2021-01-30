@@ -104,6 +104,21 @@ const Puzzle &Puzzle::GetSnailPuzzle(size_t size) {
     return target_puzzles_.at(size);
 }
 
+int Puzzle::CountInversions(const Puzzle &puzzle) {
+    int inversions = 0;
+
+    size_t internalSize = puzzle.GetSize() * puzzle.GetSize();
+    for (size_t i = 0; i < internalSize; ++i) {
+        for (size_t j = i + 1; j < internalSize; ++j) {
+            if (puzzle.At(i) != 0 && puzzle.At(j) != 0 && puzzle.At(i) > puzzle.At(j)) {
+                ++inversions;
+            }
+        }
+    }
+
+    return inversions;
+}
+
 std::ostream &operator<<(std::ostream &os, const Puzzle &field) {
     for (size_t row = 0; row < field.GetSize(); ++row) {
         for (size_t column = 0; column < field.GetSize(); ++column) {

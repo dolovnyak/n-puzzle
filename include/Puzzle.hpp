@@ -27,6 +27,7 @@ public:
     [[nodiscard]] std::vector<int> GetCells() const;
 
     const static Puzzle &GetSnailPuzzle(size_t size);
+    static int CountInversions(const Puzzle &puzzle);
 
 private:
     size_t size_;
