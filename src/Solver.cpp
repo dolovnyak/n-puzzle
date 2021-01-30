@@ -53,14 +53,14 @@ bool Solver::IsSolvable(const Puzzle &puzzle, const Puzzle &target) {
     }
 }
 
-Solver::Solver(Heuristics::Type heuristics_type, OpenSetComparator::Type algorithm_type)
+Solver::Solver(Heuristics::Type heuristics_type, Algorithm::Type algorithm_type)
         : heuristics_type_(heuristics_type),
           algorithm_type_(algorithm_type) {}
 
-Solver::SolverResult Solver::Solve(const Puzzle &puzzle, const Puzzle &targetPuzzle) {
-    SolverState state(algorithm_type_, targetPuzzle);
+Solver::SolverResult Solver::Solve(const Puzzle &puzzle, const Puzzle &target) {
+    SolverState state(algorithm_type_, target);
 
-    state.open_nodes.push(new Node(puzzle, heuristics_type_, targetPuzzle));
+    state.open_nodes.push(new Node(puzzle, heuristics_type_, target));
     ++state.total_open_nodes_count;
 
     Node *current_node;
@@ -73,7 +73,7 @@ Solver::SolverResult Solver::Solve(const Puzzle &puzzle, const Puzzle &targetPuz
         state.open_nodes.pop();
         state.closed_nodes.insert(current_node);
 
-        if (current_node->GetPuzzle() == targetPuzzle) {
+        if (current_node->GetPuzzle() == target) {
             return SolverResult(state.total_open_nodes_count,
                                 state.open_nodes.size() + state.closed_nodes.size(),
                                 GetSolution(current_node));

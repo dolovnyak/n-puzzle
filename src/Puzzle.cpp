@@ -107,9 +107,9 @@ const Puzzle &Puzzle::GetSnailPuzzle(size_t size) {
 int Puzzle::CountInversions(const Puzzle &puzzle) {
     int inversions = 0;
 
-    size_t internalSize = puzzle.GetSize() * puzzle.GetSize();
-    for (size_t i = 0; i < internalSize; ++i) {
-        for (size_t j = i + 1; j < internalSize; ++j) {
+    size_t internal_size = puzzle.GetSize() * puzzle.GetSize();
+    for (size_t i = 0; i < internal_size; ++i) {
+        for (size_t j = i + 1; j < internal_size; ++j) {
             if (puzzle.At(i) != 0 && puzzle.At(j) != 0 && puzzle.At(i) > puzzle.At(j)) {
                 ++inversions;
             }

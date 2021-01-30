@@ -47,7 +47,7 @@ private:
     static int CalculateHeuristics(const Puzzle &puzzle, Heuristics::Type type, const Puzzle &target_puzzle);
 };
 
-class OpenSetComparator {
+class Algorithm {
 public:
     enum Type {
         GreedySearch,
@@ -55,7 +55,7 @@ public:
         AStarSearch
     };
 
-    explicit OpenSetComparator(Type type) : type_(type) {}
+    explicit Algorithm(Type type) : type_(type) {}
 
     size_t operator()(const Node *lhs, const Node *rhs) const {
         switch (type_) {

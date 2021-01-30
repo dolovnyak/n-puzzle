@@ -9,14 +9,14 @@ int Heuristics::GetManhattanDistance(
 	{
     	for (size_t j = 0; j < puzzle.GetSize(); j++)
 		{
-    		int currentValue = puzzle.At(i, j);
-    		if (currentValue == 0)
+    		int current_value = puzzle.At(i, j);
+    		if (current_value == 0)
 				continue;
     		
-    		std::tuple<int, int> targetValuePos = target_puzzle.GetPosition(currentValue);
+    		std::tuple<int, int> target_value_pos = target_puzzle.GetPosition(current_value);
     		
-    		heuristics += (std::abs(static_cast<int>(i) - std::get<0>(targetValuePos)));
-			heuristics += (std::abs(static_cast<int>(j) - std::get<1>(targetValuePos)));
+    		heuristics += (std::abs(static_cast<int>(i) - std::get<0>(target_value_pos)));
+			heuristics += (std::abs(static_cast<int>(j) - std::get<1>(target_value_pos)));
 		}
 	}
     

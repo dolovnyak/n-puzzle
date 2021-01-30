@@ -45,11 +45,11 @@ public:
         std::vector<Node *> solution_;
     };
 
-    Solver(Heuristics::Type heuristicsType, OpenSetComparator::Type algorithmType);
+    Solver(Heuristics::Type heuristics_type, Algorithm::Type algorithm_type);
 
     static bool IsSolvable(const Puzzle &puzzle, const Puzzle &target);
 
-    SolverResult Solve(const Puzzle &puzzle, const Puzzle &targetPuzzle);
+    SolverResult Solve(const Puzzle &puzzle, const Puzzle &target);
 
 private:
     struct SolverState {
@@ -58,9 +58,9 @@ private:
         ClosedNodes closed_nodes;
         Puzzle target_puzzle;
 
-        explicit SolverState(OpenSetComparator::Type algorithm_type, const Puzzle &target)
+        explicit SolverState(Algorithm::Type algorithm_type, const Puzzle &target)
                 : total_open_nodes_count(0),
-                  open_nodes(OpenNodes{OpenSetComparator(algorithm_type)}),
+                  open_nodes(OpenNodes{Algorithm(algorithm_type)}),
                   closed_nodes(),
                   target_puzzle(target) {}
 
@@ -77,7 +77,7 @@ private:
     };
 
     Heuristics::Type heuristics_type_;
-    OpenSetComparator::Type algorithm_type_;
+    Algorithm::Type algorithm_type_;
 
     void AddChild(Node *parent,
                   SolverState &state,
