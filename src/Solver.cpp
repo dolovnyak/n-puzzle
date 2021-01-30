@@ -1,20 +1,5 @@
 #include "Solver.hpp"
 
-static int CountInversions(const Puzzle &puzzle) {
-    int inversions = 0;
-
-    size_t internalSize = puzzle.GetSize() * puzzle.GetSize();
-    for (size_t i = 0; i < internalSize; ++i) {
-        for (size_t j = i + 1; j < internalSize; ++j) {
-            if (puzzle.At(i) != 0 && puzzle.At(j) != 0 && puzzle.At(i) > puzzle.At(j)) {
-                ++inversions;
-            }
-        }
-    }
-
-    return inversions;
-}
-
 void Solver::AddChild(Node *parent,
                       SolverState &state,
                       const Move &move) {
