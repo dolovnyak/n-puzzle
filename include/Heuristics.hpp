@@ -10,6 +10,8 @@ public:
         LinearConflicts
     };
 
+    typedef int (*HeuristicsFunction)(const Puzzle &, const Puzzle &);
+
     static int GetManhattanDistance(const Puzzle &puzzle, const Puzzle &target_puzzle);
 
     static int GetHammingDistance(const Puzzle &puzzle, const Puzzle &target_puzzle);

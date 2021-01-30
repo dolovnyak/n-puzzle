@@ -1,6 +1,8 @@
 #include "Heuristics.hpp"
 
-int Heuristics::GetManhattanDistance(const Puzzle &puzzle, const Puzzle &target_puzzle) {
+int Heuristics::GetManhattanDistance(
+        const Puzzle &puzzle,
+        const Puzzle &target_puzzle) {
     int heuristics = 0;
 
     for (size_t i = 0; i < puzzle.GetSize(); i++)
@@ -21,18 +23,22 @@ int Heuristics::GetManhattanDistance(const Puzzle &puzzle, const Puzzle &target_
     return heuristics;
 }
 
-int Heuristics::GetLinearConflicts(const Puzzle &puzzle, const Puzzle &target_puzzle)
+int Heuristics::GetLinearConflicts(
+        [[maybe_unused]] const Puzzle &puzzle,
+        [[maybe_unused]] const Puzzle &target_puzzle)
 {
 	int heuristics = 0;
 	
 	return heuristics;
 }
 
-int Heuristics::GetHammingDistance(const Puzzle &puzzle, const Puzzle &target_puzzle) {
+int Heuristics::GetHammingDistance(
+        const Puzzle &puzzle,
+        const Puzzle &target_puzzle) {
     int heuristics = 0;
 
     for (size_t i = 0; i < puzzle.GetSize() * puzzle.GetSize(); ++i) {
-        if (static_cast<unsigned int>(puzzle.At(i)) != target_puzzle.At(i))
+        if (puzzle.At(i) != target_puzzle.At(i))
             ++heuristics;
     }
 

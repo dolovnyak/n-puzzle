@@ -95,16 +95,13 @@ int main(int argc, char **argv) {
 	catch (ParseException &parseException) {
 		std::cout << parseException.what();
 		startPuzzleStream.close();
-	
-		startPuzzleStream.open(startPuzzleFile);
-		output.PrintParseException(startPuzzleStream, parseException);
 	}
 	
 	try {
 		Solver solver(argumentParser.get<Heuristics::Type>("-h"),
 					  argumentParser.get<OpenSetComparator::Type>("-a"));
 		
-		if (solver.IsSolvable(*startPuzzle, *targetPuzzle)) {
+		if (Solver::IsSolvable(*startPuzzle, *targetPuzzle)) {
 			const auto& result = solver.Solve(*startPuzzle, *targetPuzzle);
 			output.PrintSolveSteps(result);
 		}

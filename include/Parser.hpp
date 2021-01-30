@@ -16,10 +16,10 @@ public:
 
         size_t size;
         std::vector<int> cells;
-        for (int row = 0; current_state != State::END;) {
+        while (current_state != State::END) {
             const auto &parseStateFunction = functions_map_.find(current_state);
             if (parseStateFunction != functions_map_.end()) {
-                if (parseStateFunction->second(is, row, size, cells))
+                if (parseStateFunction->second(is, size, cells))
                     current_state = static_cast<State>(static_cast<int>(current_state) + 1);
             } else {
                 throw std::logic_error("No mapped parse function for state " + std::to_string(current_state));
@@ -40,11 +40,11 @@ private:
     };
 
 private:
-    typedef bool (*ParseStateFunction)(std::istream &, int &, size_t &, std::vector<int> &);
+    typedef bool (*ParseStateFunction)(std::istream &, size_t &, std::vector<int> &);
 
-    static bool ParseBeginState(std::istream &is, int &row, size_t &size, std::vector<int> &puzzle);
-    static bool ParseSizeState(std::istream &is, int &row, size_t &size, std::vector<int> &puzzle);
-    static bool ParseFieldState(std::istream &is, int &row, size_t &size, std::vector<int> &puzzle);
+    static bool ParseBeginState(std::istream &is, size_t &size, std::vector<int> &puzzle);
+    static bool ParseSizeState(std::istream &is, size_t &size, std::vector<int> &puzzle);
+    static bool ParseFieldState(std::istream &is, size_t &size, std::vector<int> &puzzle);
 
 private:
     static const std::map<State, Parser::ParseStateFunction> functions_map_;

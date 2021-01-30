@@ -13,6 +13,21 @@ public:
         iss << input;
         return parser.Parse(iss);
     }
+
+    static void TestHeuristics(
+            const std::string &input,
+            const std::string &target,
+            Heuristics::HeuristicsFunction heuristics_function,
+            int expected) {
+        Puzzle *puzzle = HeuristicsTests::CreatePuzzle(input);
+        Puzzle *target_puzzle = HeuristicsTests::CreatePuzzle(target);
+
+        int heuristics = heuristics_function(*puzzle, *target_puzzle);
+        ASSERT_EQ(heuristics, expected);
+
+        delete puzzle;
+        delete target_puzzle;
+    }
 };
 
 TEST_F(HeuristicsTests, Hamming1) {
@@ -26,14 +41,7 @@ TEST_F(HeuristicsTests, Hamming1) {
                                      "4 5 6\n"
                                      "7 8 0\n";
 
-    Puzzle *puzzle = HeuristicsTests::CreatePuzzle(field);
-    Puzzle *target_puzzle = HeuristicsTests::CreatePuzzle(target_field);
-
-    int h = Heuristics::GetHammingDistance(*puzzle);
-    ASSERT_EQ(h, 1);
-
-    delete puzzle;
-    delete target_puzzle;
+    TestHeuristics(field, target_field, Heuristics::GetHammingDistance, 1);
 }
 
 TEST_F(HeuristicsTests, Hamming2) {
@@ -47,14 +55,7 @@ TEST_F(HeuristicsTests, Hamming2) {
                                      "4 5 6\n"
                                      "7 8 0\n";
 
-    Puzzle *puzzle = HeuristicsTests::CreatePuzzle(field);
-    Puzzle *target_puzzle = HeuristicsTests::CreatePuzzle(target_field);
-
-    int h = Heuristics::GetHammingDistance(*puzzle);
-    ASSERT_EQ(h, 2);
-
-    delete puzzle;
-    delete target_puzzle;
+    TestHeuristics(field, target_field, Heuristics::GetHammingDistance, 2);
 }
 
 TEST_F(HeuristicsTests, Manhattan1) {
@@ -68,14 +69,7 @@ TEST_F(HeuristicsTests, Manhattan1) {
                                      "4 5 6\n"
                                      "7 8 0\n";
 
-    Puzzle *puzzle = HeuristicsTests::CreatePuzzle(field);
-    Puzzle *target_puzzle = HeuristicsTests::CreatePuzzle(target_field);
-
-    int h = Heuristics::GetManhattanDistance(*puzzle);
-    ASSERT_EQ(h, 1);
-
-    delete puzzle;
-    delete target_puzzle;
+    TestHeuristics(field, target_field, Heuristics::GetManhattanDistance, 1);
 }
 
 TEST_F(HeuristicsTests, Manhattan2) {
@@ -89,12 +83,5 @@ TEST_F(HeuristicsTests, Manhattan2) {
                                      "4 5 6\n"
                                      "7 8 0\n";
 
-    Puzzle *puzzle = HeuristicsTests::CreatePuzzle(field);
-    Puzzle *target_puzzle = HeuristicsTests::CreatePuzzle(target_field);
-
-    int h = Heuristics::GetManhattanDistance(*puzzle);
-    ASSERT_EQ(h, 2);
-
-    delete puzzle;
-    delete target_puzzle;
+    TestHeuristics(field, target_field, Heuristics::GetManhattanDistance, 2);
 }

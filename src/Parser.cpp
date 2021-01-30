@@ -7,7 +7,7 @@ const std::map<Parser::State, Parser::ParseStateFunction> Parser::functions_map_
 };
 
 bool Parser::ParseFieldState(
-        std::istream &is, int &row,
+        std::istream &is,
         [[maybe_unused]] size_t &size,
         [[maybe_unused]] std::vector<int> &cells) {
     if (!is) {
@@ -18,15 +18,14 @@ bool Parser::ParseFieldState(
     getline(is, line);
 
     if (!line.empty() && line[0] != '#') {
-        throw ParseException(row, 0, "Unknown symbol.");
+        throw ParseException("Unknown symbol.");
     } else {
         // Just ignore line.
-        ++row;
         return false;
     }
 }
 
-bool Parser::ParseSizeState(std::istream &is, int &row, size_t &size,
+bool Parser::ParseSizeState(std::istream &is, size_t &size,
                             [[maybe_unused]] std::vector<int> &cells) {
     std::string line;
     std::unordered_set<int> valid_cells;
@@ -39,27 +38,29 @@ bool Parser::ParseSizeState(std::istream &is, int &row, size_t &size,
         std::stringstream ss;
 
         if (!is) {
-            throw ParseException(row, 0, "Stream is broken.");
+            throw ParseException("Stream is broken.");
         }
 
         getline(is, line);
         ss << line;
 
         if (ss.peek() == -1) {
-            throw ParseException(row, 0, "Empty line.");
+            throw ParseException("Empty line.");
         } else if (ss.peek() == '#') {
             // Just ignore line.
             --fieldRow;
-        } else if (ss) {
+        } else if (!ss) {
+            throw ParseException("Stream is broken.");
+        } else {
             int item;
             for (size_t column = 0; column < size; ++column) {
                 ss >> item;
                 if (!ss) {
-                    throw ParseException(row, static_cast<int>(ss.tellp()) + 3, "Next item expected.");
+                    throw ParseException("Next item expected.");
                 } else if (ss && ss.peek() != ' ' && ss.peek() != -1) {
-                    throw ParseException(row, std::max(static_cast<int>(ss.tellp()) - 1, 0), "Next item expected.");
+                    throw ParseException("Next item expected.");
                 } else if (valid_cells.count(item) == 0) {
-                    throw ParseException(row, std::max(static_cast<int>(ss.tellp()) - 1, 0), "Invalid cell.");
+                    throw ParseException("Invalid cell.");
                 } else {
                     ss.ignore(1);
                     cells[fieldRow * size + column] = item;
@@ -73,23 +74,19 @@ bool Parser::ParseSizeState(std::istream &is, int &row, size_t &size,
                     ss.read(&c, 1);
                 }
                 if (!ss || c != '#') {
-                    throw ParseException(row, ss.tellp(), "Unknown symbol.");
+                    throw ParseException("Unknown symbol.");
                 }
             }
-        } else {
-            throw ParseException(row, ss.tellp());
         }
-
-        ++row;
     }
 
     return true;
 }
 
-bool Parser::ParseBeginState(std::istream &is, int &row, size_t &size,
+bool Parser::ParseBeginState(std::istream &is, size_t &size,
                              [[maybe_unused]] std::vector<int> &cells) {
     if (!is) {
-        throw ParseException(row, 0, "Stream is broken.");
+        throw ParseException("Stream is broken.");
     }
 
     std::stringstream ss;
@@ -99,27 +96,25 @@ bool Parser::ParseBeginState(std::istream &is, int &row, size_t &size,
     ss << line;
 
     if (ss.peek() == -1) {
-        throw ParseException(row, 0, "Empty line.");
+        throw ParseException("Empty line.");
     } else if (ss.peek() == '#') {
         // Just ignore line.
-        ++row;
         return false;
-    } else if (ss) {
+    } else if (!ss) {
+        throw ParseException("Stream is broken.");
+    } else {
         int s;
         ss >> s;
 
         if (!ss) {
-            throw ParseException(row, std::max(static_cast<int>(ss.tellp()) - 1, 0), "Size expected, but not provided.");
+            throw ParseException("Size expected, but not provided.");
         }
 
         if (s <= 2) {
-            throw ParseException(row, std::max(static_cast<int>(ss.tellp()) - static_cast<int>(std::to_string(s).size()), 0), "Size > 2 expected.");
+            throw ParseException("Size > 2 expected.");
         }
 
         size = static_cast<size_t>(s);
-        ++row;
         return true;
-    } else {
-        throw ParseException(row, static_cast<int>(ss.tellp()) - 1, "Size > 2 expected.");
     }
 }
