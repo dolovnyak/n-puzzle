@@ -39,11 +39,15 @@ static OpenSetComparator::Type fromStringToAlgorithmType(const std::string &valu
 int main(int argc, char **argv) {
     argparse::ArgumentParser argumentParser("n-puzzle");
 
-    argumentParser.add_argument("input_file")
+    argumentParser.add_argument("start_puzzle")
             .required()
-            .help("specify the input file.");
-
-    argumentParser.add_argument("-h", "--heuristics")
+            .help("specify the start puzzle file.");
+    
+	argumentParser.add_argument("target_puzzle")
+			.required()
+			.help("specify the target puzzle file.");
+	
+	argumentParser.add_argument("-h", "--heuristics")
             .default_value(Heuristics::Manhattan)
             .help("specify the heuristics function. (Manhattan, Hamming, LinearConflicts), default - Manhattan")
             .action([](const std::string &value) { return fromStringToHeuristicType(value); });
@@ -52,9 +56,9 @@ int main(int argc, char **argv) {
             .default_value(OpenSetComparator::Type::AStarSearch)
             .help("specify the algorithm. (Greedy, AStar, Uniform), default - AStar")
             .action([](const std::string &value) { return fromStringToAlgorithmType(value); });
-
-    try {
-        argumentParser.parse_args(argc, argv);
+	
+	try {
+		argumentParser.parse_args(argc, argv);
     }
     catch (const std::runtime_error &err) {
         std::cout << err.what() << std::endl;
@@ -63,40 +67,54 @@ int main(int argc, char **argv) {
         exit(0);
     }
 
-    auto inputFile = argumentParser.get<std::string>("input_file");
-    std::ifstream is(inputFile);
-    if (!is) {
-        std::cout << "Can't open file: " << inputFile << std::endl;
+    auto startPuzzleFile = argumentParser.get<std::string>("start_puzzle");
+	auto targetPuzzleFile = argumentParser.get<std::string>("target_puzzle");
+	std::ifstream startPuzzleStream(startPuzzleFile);
+	std::ifstream targetPuzzleStream(targetPuzzleFile);
+    if (!startPuzzleStream) {
+        std::cout << "Can't open file: " << startPuzzleFile << std::endl;
         exit(0);
     }
-
-    Parser parser;
-    Output output;
+	if (!targetPuzzleStream) {
+		std::cout << "Can't open file: " << startPuzzleFile << std::endl;
+		exit(0);
+	}
+	
+	Parser parser;
+	Output output;
+	Puzzle *startPuzzle;
+    Puzzle *targetPuzzle;
+    
     try {
-        Puzzle *puzzle = parser.Parse(is);
-        if (puzzle == nullptr) {
+		startPuzzle = parser.Parse(startPuzzleStream);
+		targetPuzzle = parser.Parse(targetPuzzleStream);
+        if (startPuzzle == nullptr) {
             throw std::logic_error("Parser returned nullptr.");
         }
-
-        Solver solver(argumentParser.get<Heuristics::Type>("-h"),
-                      argumentParser.get<OpenSetComparator::Type>("-a"));
-
-        if (solver.IsSolvable(*puzzle)) {
-            const auto &result = solver.Solve(*puzzle);
-            output.PrintSolveSteps(result);
-        } else {
-            std::cout << "Oops! Your puzzle is not solvable..." << std::endl;
-        }
-
-        delete puzzle;
-    }
-    catch (ParseException &parseException) {
-        std::cout << parseException.what();
-        is.close();
-
-        is.open(inputFile);
-        output.PrintParseException(is, parseException);
-    }
+	}
+	catch (ParseException &parseException) {
+		std::cout << parseException.what();
+		startPuzzleStream.close();
+	
+		startPuzzleStream.open(startPuzzleFile);
+		output.PrintParseException(startPuzzleStream, parseException);
+	}
+	
+	try {
+		Solver solver(argumentParser.get<Heuristics::Type>("-h"),
+					  argumentParser.get<OpenSetComparator::Type>("-a"));
+		
+		if (solver.IsSolvable(*startPuzzle)) {
+			const auto& result = solver.Solve(*startPuzzle);
+			output.PrintSolveSteps(result);
+		}
+		else {
+			std::cout << "Oops! Your puzzle startPuzzleStream not solvable..." << std::endl;
+		}
+		
+		delete startPuzzle;
+		delete targetPuzzle;
+	}
     catch (const std::exception &e) {
         std::cout << e.what();
     }
