@@ -38,7 +38,7 @@ int Heuristics::GetHammingDistance(
     int heuristics = 0;
 
     for (size_t i = 0; i < puzzle.GetSize() * puzzle.GetSize(); ++i) {
-        if (puzzle.At(i) != target_puzzle.At(i))
+        if (puzzle.At(i) != 0 && puzzle.At(i) != target_puzzle.At(i))
             ++heuristics;
     }
 
