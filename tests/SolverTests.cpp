@@ -57,12 +57,11 @@ public:
     static void CheckIsSolvable(const std::string &filename, bool solvable) {
         Parser parser;
         std::ifstream is("../../resources/fields/" + filename);
-        Puzzle *p = parser.Parse(is);
-        Puzzle tp = Puzzle::GetSnailPuzzle(p->GetSize());
-        bool s = Solver::IsSolvable(*p, tp);
+        Puzzle p = parser.Parse(is);
+        Puzzle tp = Puzzle::GetSnailPuzzle(p.GetSize());
+        bool s = Solver::IsSolvable(p, tp);
         std::cout << filename << ": " << s << std::endl;
         ASSERT_EQ(s, solvable);
-        delete p;
     }
 };
 
@@ -88,11 +87,10 @@ public:
         ASSERT_NO_THROW(
                 Parser parser;
                 std::ifstream is("../../resources/fields/" + filename);
-                Puzzle *p = parser.Parse(is);
-                Puzzle tp = Puzzle::GetSnailPuzzle(p->GetSize());
+                Puzzle p = parser.Parse(is);
+                Puzzle tp = Puzzle::GetSnailPuzzle(p.GetSize());
                 Solver solver(heuristics_type, algorithm_type);
-                auto res = solver.Solve(*p, tp);
-                delete p;
+                auto res = solver.Solve(p, tp);
         );
     }
 

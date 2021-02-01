@@ -7,7 +7,7 @@
 
 class HeuristicsTests : public ::testing::Test {
 public:
-    static Puzzle *CreatePuzzle(const std::string& input) {
+    static Puzzle CreatePuzzle(const std::string& input) {
         Parser parser;
         std::stringstream iss;
         iss << input;
@@ -19,14 +19,11 @@ public:
             const std::string &target,
             Heuristics::HeuristicsFunction heuristics_function,
             int expected) {
-        Puzzle *puzzle = HeuristicsTests::CreatePuzzle(input);
-        Puzzle *target_puzzle = HeuristicsTests::CreatePuzzle(target);
+        Puzzle puzzle = HeuristicsTests::CreatePuzzle(input);
+        Puzzle target_puzzle = HeuristicsTests::CreatePuzzle(target);
 
-        int heuristics = heuristics_function(*puzzle, *target_puzzle);
+        int heuristics = heuristics_function(puzzle, target_puzzle);
         ASSERT_EQ(heuristics, expected);
-
-        delete puzzle;
-        delete target_puzzle;
     }
 };
 

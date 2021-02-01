@@ -3,15 +3,15 @@
 void Solver::AddChild(Node *parent,
                       SolverState &state,
                       const Move &move) {
-    Puzzle *new_puzzle = move.Execute(parent->GetPuzzle());
+	Puzzle new_puzzle;
+	if (move.IsMovable(parent->GetPuzzle())) {
+		new_puzzle = move.Execute(parent->GetPuzzle());
+	}
+	else {
+		return;
+	}
 
-    // Corner zero cell positions
-    if (new_puzzle == nullptr) {
-        return;
-    }
-
-    Node *temp = new Node(*new_puzzle, heuristics_type_, state.target_puzzle, parent);
-    delete new_puzzle;
+    Node *temp = new Node(new_puzzle, heuristics_type_, state.target_puzzle, parent);
 
     if (state.closed_nodes.find(temp) != state.closed_nodes.end()) {
         delete temp;

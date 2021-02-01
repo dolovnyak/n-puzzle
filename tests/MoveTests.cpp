@@ -8,32 +8,26 @@ class MoveTests : public ::testing::Test {
 public:
     static void TestInvalidMove(const std::string &input,
                          const Move &move) {
-        Puzzle *puzzle = CreatePuzzle(input);
-        Puzzle *new_puzzle = move.Execute(*puzzle);
-
-        ASSERT_EQ(new_puzzle, nullptr);
-
-        delete puzzle;
-        delete new_puzzle;
+        Puzzle puzzle = CreatePuzzle(input);
+        
+        ASSERT_EQ(move.IsMovable(puzzle), false);
     }
 
     static void TestValidMove(const std::string &input,
                        const std::string &input_target,
                        const Move &move) {
-        Puzzle *puzzle = CreatePuzzle(input);
-        Puzzle *target = CreatePuzzle(input_target);
-
-        Puzzle *new_puzzle = move.Execute(*puzzle);
-
-        ASSERT_EQ(*new_puzzle, *target);
-
-        delete puzzle;
-        delete new_puzzle;
-        delete target;
+        Puzzle puzzle = CreatePuzzle(input);
+        Puzzle target = CreatePuzzle(input_target);
+        Puzzle new_puzzle;
+        if (move.IsMovable(puzzle)) {
+			new_puzzle = move.Execute(puzzle);
+		}
+	
+		ASSERT_EQ(new_puzzle, target);
     }
 
 private:
-    static Puzzle *CreatePuzzle(const std::string& input) {
+    static Puzzle CreatePuzzle(const std::string& input) {
         Parser parser;
         std::stringstream iss;
         iss << input;

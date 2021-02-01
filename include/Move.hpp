@@ -6,7 +6,9 @@ class Move {
 public:
     Move(int dx, int dy);
 
-    [[nodiscard]] Puzzle *Execute(const Puzzle &puzzle) const;
+    [[nodiscard]] Puzzle Execute(const Puzzle &puzzle) const;
+    
+    [[nodiscard]] bool IsMovable(const Puzzle &puzzle) const;
 
 private:
     int dx;

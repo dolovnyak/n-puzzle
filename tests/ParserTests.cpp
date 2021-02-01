@@ -194,12 +194,8 @@ TEST_F(ParserTests, ValidField) {
 
     ASSERT_NO_THROW(
             Parser field_parser;
-            Puzzle *field = field_parser.Parse(iss);
-            if (field == nullptr) {
-                throw std::logic_error("Parser returned nullptr.");
-            }
+            Puzzle field = field_parser.Parse(iss);
 
-            std::cout << *field;
-            delete field;
+            std::cout << field;
     );
 }
