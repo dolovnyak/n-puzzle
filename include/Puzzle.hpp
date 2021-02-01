@@ -1,12 +1,15 @@
 #pragma once
 
+#include <tuple>
 #include <iostream>
 #include <vector>
 #include <map>
 
 class Puzzle {
 public:
-    Puzzle(size_t size, std::vector<int> raw);
+	Puzzle() = default;
+	
+	Puzzle(size_t size, std::vector<int> raw);
 
     Puzzle(const Puzzle &field);
 

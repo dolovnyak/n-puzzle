@@ -57,12 +57,12 @@ int main(int argc, char **argv) {
 
     argparse.add_argument("-h", "--heuristics")
             .default_value(Heuristics::Manhattan)
-            .help("specify the heuristics function [Manhattan, Hamming, LinearConflicts]. Default - Manhattan")
+            .help("specify the heuristics function [manhattan, hamming, linear_conflicts]. Default - Manhattan")
             .action([](const std::string &value) { return GetHeuristicsType(value); });
 
     argparse.add_argument("-a", "--algorithm")
             .default_value(Algorithm::Type::AStarSearch)
-            .help("specify the algorithm [Greedy, AStar, Uniform]. Default - AStar")
+            .help("specify the algorithm [greedy, a-star, uniform]. Default - a-star")
             .action([](const std::string &value) { return GetAlgorithmType(value); });
 
     try {

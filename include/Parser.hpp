@@ -11,7 +11,7 @@
 
 class Parser {
 public:
-    Puzzle *Parse(std::istream &is) {
+    Puzzle Parse(std::istream &is) {
         State current_state = State::BEGIN;
 
         size_t size;
@@ -26,7 +26,7 @@ public:
             }
         }
 
-        return new Puzzle(size, cells);
+        return Puzzle(size, cells);
     }
 
     Parser() = default;

@@ -60,9 +60,9 @@ public:
     size_t operator()(const Node *lhs, const Node *rhs) const {
         switch (type_) {
             case Type::GreedySearch:
-                return lhs->GetDepth() > rhs->GetDepth();
+				return lhs->GetHeuristic() > rhs->GetHeuristic();
             case Type::UniformSearch:
-                return lhs->GetHeuristic() > rhs->GetHeuristic();
+				return lhs->GetDepth() > rhs->GetDepth();
             case Type::AStarSearch:
                 return lhs->GetHeuristic() + lhs->GetDepth() > rhs->GetHeuristic() + rhs->GetDepth();
         }

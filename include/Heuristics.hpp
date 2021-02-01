@@ -21,3 +21,11 @@ public:
 private:
     Heuristics() = default;
 };
+
+struct LinearConflict
+{
+	LinearConflict(int x, int y);
+	bool operator==(const LinearConflict &linearConflict) const;
+	int x_;
+	int y_;
+};
