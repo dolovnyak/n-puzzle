@@ -7,13 +7,9 @@
 
 class Puzzle {
 public:
-	Puzzle() = default;
-	
-	Puzzle(size_t size, std::vector<int> raw);
+    Puzzle() = default;
 
-    Puzzle(const Puzzle &field);
-
-    Puzzle &operator=(const Puzzle &puzzle);
+    Puzzle(size_t size, std::vector<int> raw);
 
     bool operator==(const Puzzle &puzzle) const;
 
@@ -30,10 +26,11 @@ public:
     [[nodiscard]] std::vector<int> GetCells() const;
 
     const static Puzzle &GetSnailPuzzle(size_t size);
+
     static int CountInversions(const Puzzle &puzzle);
 
 private:
-    size_t size_;
+    size_t size_ = 0;
     std::vector<int> cells_;
 
     static std::map<size_t, Puzzle> target_puzzles_;

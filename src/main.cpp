@@ -8,10 +8,13 @@
 #include "Solver.hpp"
 #include "Output.hpp"
 
+unsigned char ToLower(unsigned char c) {
+    return std::tolower(c);
+}
+
 static Heuristics::Type GetHeuristicsType(const std::string &value) {
     std::string lowerCaseValue = value;
-    std::transform(lowerCaseValue.begin(), lowerCaseValue.end(), lowerCaseValue.begin(),
-                   [](unsigned char c) { return std::tolower(c); });
+    std::transform(lowerCaseValue.begin(), lowerCaseValue.end(), lowerCaseValue.begin(), ToLower);
     if (lowerCaseValue == "manhattan")
         return Heuristics::Manhattan;
     if (lowerCaseValue == "hamming")
@@ -24,8 +27,7 @@ static Heuristics::Type GetHeuristicsType(const std::string &value) {
 
 static Algorithm::Type GetAlgorithmType(const std::string &value) {
     std::string lowerCaseValue = value;
-    std::transform(lowerCaseValue.begin(), lowerCaseValue.end(), lowerCaseValue.begin(),
-                   [](unsigned char c) { return std::tolower(c); });
+    std::transform(lowerCaseValue.begin(), lowerCaseValue.end(), lowerCaseValue.begin(), ToLower);
     if (lowerCaseValue == "a-star")
         return Algorithm::Type::AStarSearch;
     if (lowerCaseValue == "greedy")
@@ -67,31 +69,25 @@ int main(int argc, char **argv) {
 
     try {
         argparse.parse_args(argc, argv);
-    }
-    catch (const std::runtime_error &err) {
+    } catch (const std::runtime_error &err) {
         std::cout << err.what() << std::endl;
         std::cout << std::endl;
         std::cout << argparse;
         exit(0);
     }
 
-    std::ifstream input_puzzle_stream = GetStream(argparse.get<std::string>("start_puzzle"));
-
-    Parser parser;
-    Output output;
-
-    Puzzle input_puzzle;
-    Puzzle target_puzzle;
-
-    //TODO bad steams closing
     try {
-        input_puzzle = parser.Parse(input_puzzle_stream);
+        Puzzle input_puzzle;
+        Puzzle target_puzzle;
+
+        std::ifstream input_puzzle_stream = GetStream(argparse.get<std::string>("start_puzzle"));
+
+        input_puzzle = Parser::Parse(input_puzzle_stream);
 
         if (argparse.present("-t")) {
             std::ifstream target_puzzle_stream = GetStream(argparse.get<std::string>("-t"));
-            target_puzzle = parser.Parse(target_puzzle_stream);
-        }
-        else {
+            target_puzzle = Parser::Parse(target_puzzle_stream);
+        } else {
             target_puzzle = Puzzle::GetSnailPuzzle(input_puzzle.GetSize());
         }
 
@@ -100,15 +96,12 @@ int main(int argc, char **argv) {
 
         if (Solver::IsSolvable(input_puzzle, target_puzzle)) {
             const auto &result = solver.Solve(input_puzzle, target_puzzle);
-            output.PrintSolveSteps(result);
-        }
-        else {
+            Output::PrintSolveSteps(result);
+        } else {
             std::cout << "Oops! Your puzzle input_puzzle_stream not solvable..." << std::endl;
         }
-    }
-    catch (std::exception &ex) {
+    } catch (std::exception &ex) {
         std::cout << ex.what();
-        input_puzzle_stream.close();
     }
 
     exit(0);

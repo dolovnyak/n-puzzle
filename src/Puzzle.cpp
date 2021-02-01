@@ -6,26 +6,12 @@ Puzzle::Puzzle(size_t size, std::vector<int> raw)
         : size_(size),
           cells_(std::move(raw)) {}
 
-Puzzle::Puzzle(const Puzzle &puzzle)
-        : size_(puzzle.size_),
-          cells_(puzzle.cells_) {}
-
 int Puzzle::At(size_t pos) const {
     return cells_[pos];
 }
 
 int Puzzle::At(size_t row, size_t column) const {
     return cells_[row * size_ + column];
-}
-
-Puzzle &Puzzle::operator=(const Puzzle &puzzle) {
-    if (this == &puzzle)
-        return *this;
-
-    size_ = puzzle.size_;
-    cells_ = puzzle.cells_;
-
-    return *this;
 }
 
 bool Puzzle::operator==(const Puzzle &puzzle) const {

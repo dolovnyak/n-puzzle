@@ -8,15 +8,11 @@ public:
     Node(const Puzzle &puzzle,
          Heuristics::Type heuristic_type,
          const Puzzle &target_puzzle,
-         Node *parent);
-			
+         std::shared_ptr<Node> parent);
+
     Node(const Puzzle &puzzle,
          Heuristics::Type heuristic_type,
          const Puzzle &target_puzzle);
-
-    Node(const Node &node);
-
-    Node &operator=(const Node &node);
 
     [[nodiscard]] const Puzzle &GetPuzzle() const;
 
@@ -24,13 +20,13 @@ public:
 
     [[nodiscard]] int GetDepth() const;
 
-    [[nodiscard]] Node *GetParent() const;
+    [[nodiscard]] std::shared_ptr<Node> GetParent() const;
 
 public:
     friend std::ostream &operator<<(std::ostream &os, const Node &node) {
         os << "h: " << node.heuristic_;
         os << ", d: " << node.depth_;
-        os << ", s: " << node.heuristic_ + node.depth_; // TODO is it really necessary
+        os << ", s: " << node.heuristic_ + node.depth_; // TODO add time
         os << std::endl;
         os << node.GetPuzzle();
         return os;
@@ -38,7 +34,7 @@ public:
 
 private:
     Puzzle puzzle_;
-    Node *parent_;
+    std::shared_ptr<Node> parent_;
 
     int depth_;
     int heuristic_;
@@ -55,14 +51,15 @@ public:
         AStarSearch
     };
 
-    explicit Algorithm(Type type) : type_(type) {}
+    explicit Algorithm(Type type)
+            : type_(type) {}
 
-    size_t operator()(const Node *lhs, const Node *rhs) const {
+    size_t operator()(const std::shared_ptr<Node> &lhs, const std::shared_ptr<Node> &rhs) const {
         switch (type_) {
             case Type::GreedySearch:
-				return lhs->GetHeuristic() > rhs->GetHeuristic();
+                return lhs->GetHeuristic() > rhs->GetHeuristic();
             case Type::UniformSearch:
-				return lhs->GetDepth() > rhs->GetDepth();
+                return lhs->GetDepth() > rhs->GetDepth();
             case Type::AStarSearch:
                 return lhs->GetHeuristic() + lhs->GetDepth() > rhs->GetHeuristic() + rhs->GetDepth();
         }
@@ -70,18 +67,4 @@ public:
 
 private:
     Type type_;
-};
-
-struct HashNodeByPuzzle {
-public:
-    size_t operator()(const Node *node) const {
-        return node->GetPuzzle().GetHash();
-    }
-};
-
-struct EqualNodeByPuzzle {
-public:
-    size_t operator()(const Node *firstNode, const Node *secondNode) const {
-        return firstNode->GetPuzzle() == secondNode->GetPuzzle();
-    }
 };

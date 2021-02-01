@@ -10,22 +10,25 @@ public:
         LinearConflicts
     };
 
-    typedef int (*HeuristicsFunction)(const Puzzle &, const Puzzle &);
+    using HeuristicsFunction = std::function<int(const Puzzle &, const Puzzle &)>;
 
     static int GetManhattanDistance(const Puzzle &puzzle, const Puzzle &target_puzzle);
 
     static int GetHammingDistance(const Puzzle &puzzle, const Puzzle &target_puzzle);
-    
+
     static int GetLinearConflicts(const Puzzle &puzzle, const Puzzle &target_puzzle);
 
 private:
     Heuristics() = default;
 };
 
-struct LinearConflict
-{
-	LinearConflict(int x, int y);
-	bool operator==(const LinearConflict &linearConflict) const;
-	int x_;
-	int y_;
+struct LinearConflict {
+public:
+    LinearConflict(int x, int y);
+
+    bool operator==(const LinearConflict &linear_conflict) const;
+
+private:
+    int x_;
+    int y_;
 };

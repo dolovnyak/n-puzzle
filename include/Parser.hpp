@@ -11,7 +11,7 @@
 
 class Parser {
 public:
-    Puzzle Parse(std::istream &is) {
+    static Puzzle Parse(std::istream &is) {
         State current_state = State::BEGIN;
 
         size_t size;
@@ -29,8 +29,6 @@ public:
         return Puzzle(size, cells);
     }
 
-    Parser() = default;
-
 private:
     enum State {
         BEGIN,
@@ -40,10 +38,12 @@ private:
     };
 
 private:
-    typedef bool (*ParseStateFunction)(std::istream &, size_t &, std::vector<int> &);
+    using ParseStateFunction = std::function<bool(std::istream &, size_t &, std::vector<int> &)>;
 
     static bool ParseBeginState(std::istream &is, size_t &size, std::vector<int> &puzzle);
+
     static bool ParseSizeState(std::istream &is, size_t &size, std::vector<int> &puzzle);
+
     static bool ParseFieldState(std::istream &is, size_t &size, std::vector<int> &puzzle);
 
 private:

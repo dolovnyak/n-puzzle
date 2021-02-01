@@ -31,6 +31,5 @@
 
 class Output {
 public:
-    void PrintParseException(std::istream &is, const ParseException &ex) noexcept;
-    void PrintSolveSteps(const Solver::SolverResult &solver_result);
+    static void PrintSolveSteps(const Solver::SolverResult &solver_result);
 };

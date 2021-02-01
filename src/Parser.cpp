@@ -57,7 +57,7 @@ bool Parser::ParseSizeState(std::istream &is, size_t &size,
                 ss >> item;
                 if (!ss) {
                     throw ParseException("Next item expected.");
-                } else if (ss && ss.peek() != ' ' && ss.peek() != -1) {
+                } else if (ss.peek() != ' ' && ss.peek() != -1) {
                     throw ParseException("Next item expected.");
                 } else if (valid_cells.count(item) == 0) {
                     throw ParseException("Invalid cell.");
