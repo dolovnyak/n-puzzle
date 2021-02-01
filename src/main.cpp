@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
 
     argparse.add_argument("-h", "--heuristics")
             .default_value(Heuristics::Manhattan)
-            .help("specify the heuristics function [manhattan, hamming, linear_conflicts]. Default - Manhattan")
+            .help("specify the heuristics function [manhattan, hamming, linear_conflicts]. Default - manhattan")
             .action([](const std::string &value) { return GetHeuristicsType(value); });
 
     argparse.add_argument("-a", "--algorithm")
@@ -67,7 +67,8 @@ int main(int argc, char **argv) {
 
     try {
         argparse.parse_args(argc, argv);
-    } catch (const std::runtime_error &err) {
+    }
+    catch (const std::runtime_error &err) {
         std::cout << err.what() << std::endl;
         std::cout << std::endl;
         std::cout << argparse;
@@ -79,41 +80,36 @@ int main(int argc, char **argv) {
     Parser parser;
     Output output;
 
-    const Puzzle *input_puzzle = nullptr;
-    const Puzzle *target_puzzle = nullptr;
+    Puzzle input_puzzle;
+    Puzzle target_puzzle;
 
+    //TODO bad steams closing
     try {
         input_puzzle = parser.Parse(input_puzzle_stream);
-        if (input_puzzle == nullptr) {
-            throw std::logic_error("Parser returned nullptr.");
-        }
 
         if (argparse.present("-t")) {
             std::ifstream target_puzzle_stream = GetStream(argparse.get<std::string>("-t"));
             target_puzzle = parser.Parse(target_puzzle_stream);
-            if (target_puzzle == nullptr) {
-                throw std::logic_error("Parser returned nullptr.");
-            }
-        } else {
-            target_puzzle = &Puzzle::GetSnailPuzzle(input_puzzle->GetSize());
+        }
+        else {
+            target_puzzle = Puzzle::GetSnailPuzzle(input_puzzle.GetSize());
         }
 
         Solver solver(argparse.get<Heuristics::Type>("-h"),
                       argparse.get<Algorithm::Type>("-a"));
 
-        if (Solver::IsSolvable(*input_puzzle, *target_puzzle)) {
-            const auto &result = solver.Solve(*input_puzzle, *target_puzzle);
+        if (Solver::IsSolvable(input_puzzle, target_puzzle)) {
+            const auto &result = solver.Solve(input_puzzle, target_puzzle);
             output.PrintSolveSteps(result);
-        } else {
+        }
+        else {
             std::cout << "Oops! Your puzzle input_puzzle_stream not solvable..." << std::endl;
         }
-    } catch (std::exception &ex) {
+    }
+    catch (std::exception &ex) {
         std::cout << ex.what();
         input_puzzle_stream.close();
     }
-
-    delete input_puzzle;
-    delete target_puzzle;
 
     exit(0);
 }

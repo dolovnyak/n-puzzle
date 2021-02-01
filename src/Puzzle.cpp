@@ -62,7 +62,7 @@ std::tuple<size_t, size_t> Puzzle::GetPosition(int value) const {
             }
         }
     }
-    throw std::logic_error("Get position - incorrect value"); //TODO handle error in main
+    throw std::logic_error("Get position - incorrect value");
 }
 
 Puzzle Puzzle::CreateSnailPuzzle(size_t size) {
