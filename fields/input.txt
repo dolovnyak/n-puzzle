@@ -1,5 +1,0 @@
-# this is a comment
-3
-4 2 5 #another comment
-1 0 6
-3 8 7
