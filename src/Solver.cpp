@@ -1,6 +1,6 @@
 #include "Solver.hpp"
 
-#include <memory>
+#include <chrono>
 
 void Solver::AddChild(const std::shared_ptr<Node> &parent,
                       SolverState &state,
@@ -57,6 +57,8 @@ Solver::Solver(Heuristics::Type heuristics_type, Algorithm::Type algorithm_type)
           algorithm_type_(algorithm_type) {}
 
 Solver::SolverResult Solver::Solve(const Puzzle &puzzle, const Puzzle &target) {
+    auto start = std::chrono::high_resolution_clock::now();
+
     SolverState state(algorithm_type_, target);
 
     state.open_nodes.push(std::make_unique<Node>(puzzle, heuristics_type_, target));
@@ -72,7 +74,9 @@ Solver::SolverResult Solver::Solve(const Puzzle &puzzle, const Puzzle &target) {
         state.closed_nodes.insert(current_node);
 
         if (current_node->GetPuzzle() == target) {
-            return SolverResult(state.total_open_nodes_count,
+            auto finish = std::chrono::high_resolution_clock::now();
+            return SolverResult(std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count(),
+                                state.total_open_nodes_count,
                                 state.open_nodes.size() + state.closed_nodes.size(),
                                 GetSolution(current_node));
         }
@@ -81,9 +85,11 @@ Solver::SolverResult Solver::Solve(const Puzzle &puzzle, const Puzzle &target) {
     }
 }
 
-Solver::SolverResult::SolverResult(const size_t total_open_nodes_count,
+Solver::SolverResult::SolverResult(const size_t total_milliseconds,
+                                   const size_t total_open_nodes_count,
                                    const size_t total_nodes_count,
                                    std::vector<std::shared_ptr<Node>> solution)
-        : total_open_nodes_count_(total_open_nodes_count),
+        : total_milliseconds_(total_milliseconds),
+          total_open_nodes_count_(total_open_nodes_count),
           total_nodes_count_(total_nodes_count),
           solution_(std::move(solution)) {}

@@ -32,9 +32,14 @@ class Solver {
 public:
     class SolverResult {
     public:
-        SolverResult(size_t total_open_nodes_count,
+        SolverResult(size_t total_milliseconds,
+                     size_t total_open_nodes_count,
                      size_t total_nodes_count,
                      std::vector<std::shared_ptr<Node>> solution);
+
+        [[nodiscard]] size_t GetTotalTime() const {
+            return total_milliseconds_;
+        }
 
         [[nodiscard]] size_t GetTotalOpenNodesCount() const {
             return total_open_nodes_count_;
@@ -49,6 +54,7 @@ public:
         }
 
     private:
+        size_t total_milliseconds_;
         size_t total_open_nodes_count_;
         size_t total_nodes_count_;
         std::vector<std::shared_ptr<Node>> solution_;
