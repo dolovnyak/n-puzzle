@@ -24,7 +24,8 @@ private:
 
 struct LinearConflict {
 public:
-    LinearConflict(int x, int y);
+	LinearConflict() = default;
+	LinearConflict(int x, int y);
 
     bool operator==(const LinearConflict &linear_conflict) const;
 

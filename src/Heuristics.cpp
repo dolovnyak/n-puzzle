@@ -7,117 +7,113 @@ int Heuristics::GetManhattanDistance(
         const Puzzle &target_puzzle) {
     int heuristics = 0;
 
-    for (size_t i = 0; i < puzzle.GetSize(); i++) {
-        for (size_t j = 0; j < puzzle.GetSize(); j++) {
-            int current_value = puzzle.At(i, j);
+    for (size_t row = 0; row < puzzle.GetSize(); row++) {
+        for (size_t column = 0; column < puzzle.GetSize(); column++) {
+            int current_value = puzzle.At(row, column);
             if (current_value == 0)
                 continue;
 
-            std::tuple<int, int> target_value_pos = target_puzzle.GetPosition(current_value);
+            Position target_value_pos = target_puzzle.GetPosition(current_value);
 
-            heuristics += (std::abs(static_cast<int>(i) - std::get<0>(target_value_pos)));
-            heuristics += (std::abs(static_cast<int>(j) - std::get<1>(target_value_pos)));
+            heuristics += (std::abs(static_cast<int>(row) - static_cast<int>(target_value_pos.row)));
+            heuristics += (std::abs(static_cast<int>(column) - static_cast<int>(target_value_pos.col)));
         }
     }
 
     return heuristics;
 }
 
-//TODO I know there is a lot of duplicated code, if you can please refactor
-bool IsLinearConflictByRow(const Puzzle &puzzle, const Puzzle &target_puzzle, std::tuple<int, int> pos,
-                           std::tuple<int, int> targetPos, int &linearConflictValue) {
-    int row = std::get<0>(pos);
-    int posCol = std::get<1>(pos);
-    int targetPosCol = std::get<1>(targetPos);
-
-    if (posCol < targetPosCol) {
-        for (int col = posCol + 1; col <= targetPosCol; col++) {
-            int tmpValue = puzzle.At(row, col);
-            if (tmpValue == 0)
-                continue;
-            std::tuple<int, int> targetTmpValuePos = target_puzzle.GetPosition(tmpValue);
-            if (std::get<0>(targetTmpValuePos) == row) {
-                linearConflictValue = tmpValue;
-                return true;
-            }
-        }
-    } else {
-        for (int col = posCol - 1; col >= targetPosCol; --col) {
-            int tmpValue = puzzle.At(row, col);
-            if (tmpValue == 0)
-                continue;
-            std::tuple<int, int> targetTmpValuePos = target_puzzle.GetPosition(tmpValue);
-            if (std::get<0>(targetTmpValuePos) == row) {
-                linearConflictValue = tmpValue;
-                return true;
-            }
-        }
-    }
-
-    return false;
+bool IsContains(const std::vector<LinearConflict> &linear_conflicts, const LinearConflict &linear_conflict) {
+	if (std::find(linear_conflicts.begin(), linear_conflicts.end(), linear_conflict) != linear_conflicts.end()) {
+		return true;
+	}
+	
+	return false;
 }
 
-bool IsLinearConflictByColumn(const Puzzle &puzzle, const Puzzle &target_puzzle, std::tuple<int, int> pos,
-                              std::tuple<int, int> targetPos, int &linearConflictValue) {
-    int col = std::get<1>(pos);
-    int posRow = std::get<0>(pos);
-    int targetPosRow = std::get<0>(targetPos);
-
-    if (posRow < targetPosRow) {
-        for (int row = posRow + 1; row <= targetPosRow; row++) {
-            int tmpValue = puzzle.At(row, col);
-            if (tmpValue == 0)
-                continue;
-            std::tuple<int, int> targetTmpValuePos = target_puzzle.GetPosition(tmpValue);
-            if (std::get<1>(targetTmpValuePos) == col) {
-                linearConflictValue = tmpValue;
-                return true;
-            }
-        }
-    } else {
-        for (int row = posRow - 1; row >= targetPosRow; row--) {
-            int tmpValue = puzzle.At(row, col);
-            if (tmpValue == 0)
-                continue;
-            std::tuple<int, int> targetTmpValuePos = target_puzzle.GetPosition(tmpValue);
-            if (std::get<1>(targetTmpValuePos) == col) {
-                linearConflictValue = tmpValue;
-                return true;
-            }
-        }
-    }
-
-    return false;
+void AddLinearConflictByRow(const Puzzle &puzzle, const Puzzle &target_puzzle, Position current_value_pos,
+							Position target_pos, std::vector<LinearConflict> &linear_conflicts)
+{
+	int current_value = puzzle.At(current_value_pos);
+	int current_linear_conflict_value;
+	
+	std::function<bool(int)> is_border_reached;
+	int dir;
+	
+	if (current_value_pos.col < target_pos.col) {
+		dir = 1;
+		is_border_reached = [target_pos](int col) { return col <= static_cast<int>(target_pos.col); };
+	}
+	else {
+		dir = -1;
+		is_border_reached = [target_pos](int col) { return col >= static_cast<int>(target_pos.col); };
+	}
+	
+	for (int col = static_cast<int>(current_value_pos.col) + dir; is_border_reached(col); col += dir) {
+		current_linear_conflict_value = puzzle.At(current_value_pos.row, col);
+		if (current_linear_conflict_value == 0)
+			continue;
+		if (target_puzzle.GetPosition(current_linear_conflict_value).row == current_value_pos.row) {
+			if (!IsContains(linear_conflicts, LinearConflict(current_value, current_linear_conflict_value))) {
+				linear_conflicts.emplace_back(current_value, current_linear_conflict_value);
+				return;
+			}
+		}
+	}
 }
 
-int Heuristics::GetLinearConflicts(const Puzzle &puzzle, const Puzzle &target_puzzle) {
-    std::vector<LinearConflict> linearConflicts;
-    int linearConflictValue;
+void AddLinearConflictByColumn(const Puzzle &puzzle, const Puzzle &target_puzzle, Position current_value_pos,
+							   Position target_pos, std::vector<LinearConflict> &linear_conflicts)
+{
+	int current_value = puzzle.At(current_value_pos);
+	int current_linear_conflict_value;
+	
+	std::function<bool(int)> is_border_reached;
+	int dir;
+	
+	if (current_value_pos.row < target_pos.row) {
+		dir = 1;
+		is_border_reached = [target_pos](int row) { return row <= static_cast<int>(target_pos.row); };
+	}
+	else {
+		dir = -1;
+		is_border_reached = [target_pos](int row) { return row >= static_cast<int>(target_pos.row); };
+	}
+	
+	for (int row = static_cast<int>(current_value_pos.row) + dir; is_border_reached(row); row += dir) {
+		current_linear_conflict_value = puzzle.At(row, current_value_pos.col);
+		if (current_linear_conflict_value == 0)
+			continue;
+		if (target_puzzle.GetPosition(current_linear_conflict_value).col == current_value_pos.col) {
+			if (!IsContains(linear_conflicts, LinearConflict(current_value, current_linear_conflict_value))) {
+				linear_conflicts.emplace_back(current_value, current_linear_conflict_value);
+				return;
+			}
+		}
+	}
+}
 
-    for (int row = 0; row < static_cast<int>(puzzle.GetSize()); row++) {
-        for (int col = 0; col < static_cast<int>(puzzle.GetSize()); col++) {
-            int currentValue = puzzle.At(row, col);
-            if (currentValue == 0)
-                continue;
-            std::tuple<int, int> targetValuePos = target_puzzle.GetPosition(currentValue);
-            if (std::get<0>(targetValuePos) == row && std::get<1>(targetValuePos) == col)
-                continue;
-            if (std::get<0>(targetValuePos) == row) {
-                if (IsLinearConflictByRow(puzzle, target_puzzle, std::tuple<int, int>(row, col), targetValuePos, linearConflictValue)) {
-                    if (std::find(linearConflicts.begin(), linearConflicts.end(),
-                                  LinearConflict(currentValue, linearConflictValue)) == linearConflicts.end())
-                        linearConflicts.emplace_back(currentValue, linearConflictValue);
-                }
-            } else if (std::get<1>(targetValuePos) == col) {
-                if (IsLinearConflictByColumn(puzzle, target_puzzle, std::tuple<int, int>(row, col), targetValuePos, linearConflictValue)) {
-                    if (std::find(linearConflicts.begin(), linearConflicts.end(),
-                                  LinearConflict(currentValue, linearConflictValue)) == linearConflicts.end())
-                        linearConflicts.emplace_back(currentValue, linearConflictValue);
-                }
-            }
-        }
-    }
-    return (static_cast<int>(linearConflicts.size()) * 2 + GetManhattanDistance(puzzle, target_puzzle));
+int Heuristics::GetLinearConflicts(const Puzzle &puzzle, const Puzzle &target_puzzle)
+{
+	std::vector<LinearConflict> linearConflicts;
+	
+	for (size_t row = 0; row < puzzle.GetSize(); row++) {
+		for (size_t col = 0; col < puzzle.GetSize(); col++) {
+			int currentValue = puzzle.At(row, col);
+			if (currentValue == 0)
+				continue;
+			
+			Position target_value_position = target_puzzle.GetPosition(currentValue);
+			if (target_value_position.row == row && target_value_position.col == col)
+				continue;
+			
+			if (target_value_position.row == row)
+				AddLinearConflictByRow(puzzle, target_puzzle, Position(row, col), target_value_position, linearConflicts);
+			else if (target_value_position.col == col)
+				AddLinearConflictByColumn(puzzle, target_puzzle, Position(row, col), target_value_position, linearConflicts);
+		}
+	}
+	return (static_cast<int>(linearConflicts.size()) * 2 + GetManhattanDistance(puzzle, target_puzzle));
 }
 
 int Heuristics::GetHammingDistance(
@@ -141,3 +137,4 @@ bool LinearConflict::operator==(const LinearConflict &linear_conflict) const {
     return ((x_ == linear_conflict.x_ && y_ == linear_conflict.y_) ||
             (x_ == linear_conflict.y_ && y_ == linear_conflict.x_));
 }
+

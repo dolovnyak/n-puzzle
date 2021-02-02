@@ -5,6 +5,12 @@
 #include <vector>
 #include <map>
 
+struct Position {
+	Position(size_t row, size_t column);
+	size_t row;
+	size_t col;
+};
+
 class Puzzle {
 public:
     Puzzle() = default;
@@ -17,13 +23,15 @@ public:
 
     [[nodiscard]] size_t GetHash() const;
 
-    [[nodiscard]] std::tuple<size_t, size_t> GetPosition(int value) const;
+    [[nodiscard]] Position GetPosition(int value) const;
 
     [[nodiscard]] int At(size_t pos) const;
 
     [[nodiscard]] int At(size_t row, size_t column) const;
-
-    [[nodiscard]] std::vector<int> GetCells() const;
+    
+	[[nodiscard]] int At(Position position) const;
+	
+	[[nodiscard]] std::vector<int> GetCells() const;
 
     const static Puzzle &GetSnailPuzzle(size_t size);
 

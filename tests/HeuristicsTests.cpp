@@ -110,3 +110,34 @@ TEST_F(HeuristicsTests, Manhattan3) {
 
     TestHeuristics(field, target_field, Heuristics::GetManhattanDistance, 8);
 }
+
+TEST_F(HeuristicsTests, LinearConflics1) {
+	const std::string field = "3\n"
+							  "4 2 5\n"
+							  "1 0 6\n"
+							  "3 8 7\n";
+	
+	const std::string target_field = "3\n"
+									 "1 2 3\n"
+									 "4 5 6\n"
+									 "7 8 0\n";
+	
+	TestHeuristics(field, target_field, Heuristics::GetLinearConflicts, 14);
+}
+
+TEST_F(HeuristicsTests, LinearConflics2) {
+	// manhattan - 8, linear - (3 4), (4 1), (1 3) (1 2) - 4 * 2
+	const std::string field = "4\n"
+							  "3  4  1  2\n"
+							  "12 13 14 5\n"
+							  "11 0  15 6\n"
+							  "10 9  8  7\n";
+	
+	const std::string target_field = "4\n"
+									 "1  2  3  4\n"
+									 "12 13 14 5\n"
+									 "11 0  15 6\n"
+									 "10 9  8  7\n";
+	
+	TestHeuristics(field, target_field, Heuristics::GetLinearConflicts, 16);
+}

@@ -46,8 +46,8 @@ bool Solver::IsSolvable(const Puzzle &puzzle, const Puzzle &target) {
     if (puzzle.GetSize() % 2 == 1) {
         return inversions % 2 == target_inversions % 2;
     } else {
-        size_t row = puzzle.GetSize() - std::get<0>(puzzle.GetPosition(0));
-        size_t target_row = target.GetSize() - std::get<0>(target.GetPosition(0));
+        size_t row = puzzle.GetSize() - puzzle.GetPosition(0).row;
+        size_t target_row = target.GetSize() - target.GetPosition(0).row;
         return (row % 2 == target_row % 2) == (inversions % 2 == target_inversions % 2);
     }
 }

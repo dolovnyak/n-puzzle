@@ -40,11 +40,11 @@ std::vector<int> Puzzle::GetCells() const {
     return cells_;
 }
 
-std::tuple<size_t, size_t> Puzzle::GetPosition(int value) const {
+Position Puzzle::GetPosition(int value) const {
     for (size_t row = 0; row < size_; ++row) {
         for (size_t column = 0; column < size_; ++column) {
             if (cells_[row * size_ + column] == value) {
-                return std::tie(row, column);
+				return Position(row, column);
             }
         }
     }
@@ -105,6 +105,10 @@ int Puzzle::CountInversions(const Puzzle &puzzle) {
     return inversions;
 }
 
+int Puzzle::At(Position pos) const {
+	return At(pos.row, pos.col);
+}
+
 std::ostream &operator<<(std::ostream &os, const Puzzle &field) {
     for (size_t row = 0; row < field.GetSize(); ++row) {
         for (size_t column = 0; column < field.GetSize(); ++column) {
@@ -117,3 +121,6 @@ std::ostream &operator<<(std::ostream &os, const Puzzle &field) {
     }
     return os;
 }
+
+Position::Position(size_t row, size_t column) : row(row), col(column)
+{}
