@@ -10,6 +10,3 @@ make
 make install
 cd ../..
 rm -rf googletest
-
-# Install boost
-brew install boost
