@@ -166,3 +166,4 @@ CMakeUserPresets.json
 # End of https://www.toptal.com/developers/gitignore/api/clion,cmake,c++
 
 n_puzzle
+*.DS_Store
