@@ -55,7 +55,7 @@ std::vector<std::string> unsolvable_input_files = {
 class SolvableTests : public ::testing::Test {
 public:
     static void CheckIsSolvable(const std::string &filename, bool solvable) {
-        std::ifstream is("../../resources/fields/" + filename);
+        std::ifstream is("resources/" + filename);
         Puzzle p = Parser::Parse(is);
         Puzzle tp = Puzzle::GetSnailPuzzle(p.GetSize());
         bool s = Solver::IsSolvable(p, tp);
@@ -76,7 +76,6 @@ TEST_F(SolvableTests, Unsolvable) {
     }
 }
 
-
 class SolveTests : public ::testing::Test {
 public:
     static void CheckSolve(
@@ -85,7 +84,7 @@ public:
             Algorithm::Type algorithm_type) {
         ASSERT_NO_THROW(
                 Parser parser;
-                std::ifstream is("../../resources/fields/" + filename);
+                std::ifstream is("resources/" + filename);
                 Puzzle p = parser.Parse(is);
                 Puzzle tp = Puzzle::GetSnailPuzzle(p.GetSize());
                 Solver solver(heuristics_type, algorithm_type);
