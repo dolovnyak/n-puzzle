@@ -167,3 +167,4 @@ CMakeUserPresets.json
 
 n_puzzle
 *.DS_Store
+build
