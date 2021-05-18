@@ -8,15 +8,15 @@ This program solves n-puzzle using various search and heuristic algorithms.
 ----------
 Search algorithms:
 ----------
-- ### `Greedy search` - finds a solution using only heuristics.
-- ### `Uniform search / Brute-force search` - finds a solution using only depth.
-- ### `A-star search` - finds a solution using depth with heuristic.
+- `Greedy search` - finds a solution using only heuristics.
+- `Uniform search / Brute-force search` - finds a solution using only depth.
+- `A-star search` - finds a solution using depth with heuristic.
 ###
 Heuristics:
 ----------
-- ### `Manhattan distance / Taxicab geometry` - for each tile, there is distance (number of tiles away) from it’s target position. Manhattan distance returns sum of all these distances.
-- ### `Hamming distance` - the number of tiles that are not in their final position.
-- ### `Linear Conflict + Manhattan Distance / Taxicab geometry` - Two tiles are in a linear conflict if they are in the same row or column, and their target positions are in the same row or column, and the target position of one of the tiles is blocked by the other tile in that row. This heuristic return Manhattan Distance result + linear conflicts (above) * 2.
+- `Manhattan distance / Taxicab geometry` - for each tile, there is distance (number of tiles away) from it’s target position. Manhattan distance returns sum of all these distances.
+- `Hamming distance` - the number of tiles that are not in their final position.
+- `Linear Conflict + Manhattan Distance / Taxicab geometry` - Two tiles are in a linear conflict if they are in the same row or column, and their target positions are in the same row or column, and the target position of one of the tiles is blocked by the other tile in that row. This heuristic return Manhattan Distance result + linear conflicts (above) * 2.
 ###
 
 Build and run on `MacOS`:
