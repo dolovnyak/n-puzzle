@@ -41,6 +41,7 @@ set_target_properties(${PROJECT_NAME}
 ################################################################################
 set(N_PUZZLE_TESTS ${PROJECT_NAME}_tests)
 add_subdirectory(libs/googletest)
+
 add_executable(${N_PUZZLE_TESTS}
         tests/HeuristicsTests.cpp
         tests/MoveTests.cpp
@@ -56,6 +57,8 @@ target_link_libraries(${N_PUZZLE_TESTS}
         gtest_main
         ${N_PUZZLE_LIB}
         )
+
+# replaced executable file to root dir
 set_target_properties(${N_PUZZLE_TESTS}
         PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}"
