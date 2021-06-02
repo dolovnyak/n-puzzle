@@ -4,7 +4,7 @@
 ###
 [![Coverage Status](https://coveralls.io/repos/github/dolovnyak/n-puzzle/badge.svg?branch=main)](https://coveralls.io/github/dolovnyak/n-puzzle?branch=main)
 
-This program solves n-puzzle using various search and heuristic algorithms.
+This program solves puzzles of various sizes using various search and heuristic algorithms.
 ----------
 Search algorithms:
 ----------
