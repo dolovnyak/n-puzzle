@@ -1,8 +1,6 @@
 # N-puzzle solver
 
-# MacOS - [![Build Status](https://www.travis-ci.com/dolovnyak/n-puzzle.svg?branch=main)](https://www.travis-ci.com/dolovnyak/n-puzzle)
-###
-[![Coverage Status](https://coveralls.io/repos/github/dolovnyak/n-puzzle/badge.svg?branch=main)](https://coveralls.io/github/dolovnyak/n-puzzle?branch=main)
+## MacOS - ![Build](https://github.com/dolovnyak/n-puzzle/actions/workflows/build.yml/badge.svg?branch=master)
 
 This program solves puzzles of various sizes using various search and heuristic algorithms.
 ----------
