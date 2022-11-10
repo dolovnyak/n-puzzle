@@ -1,6 +1,6 @@
 # N-puzzle solver
 
-## MacOS - ![Build](https://github.com/dolovnyak/n-puzzle/actions/workflows/build.yml/badge.svg?branch=master)
+## MacOS - ![Build](https://github.com/dolovnyak/n-puzzle/actions/workflows/build.yml/badge.svg?branch=main)
 
 This program solves puzzles of various sizes using various search and heuristic algorithms.
 ----------
